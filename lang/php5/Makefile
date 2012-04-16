@@ -459,6 +459,18 @@ define Package/php5/conffiles
 /etc/php.ini
 endef
 
+define Build/Compile
+        $(MAKE) -C $(PKG_BUILD_DIR) INSTALL_ROOT="$(PKG_INSTALL_DIR)" all install
+endef
+
+define Build/InstallDev
+	$(SED) 's,prefix=\"/usr\",prefix=\"$(STAGING_DIR)/usr\",g' $(PKG_INSTALL_DIR)/usr/bin/php-config
+	$(SED) 's,--with-config-file-scan-dir=/etc/php5,--with-config-file-scan-dir=$(STAGING_DIR)/etc/php5,g' $(PKG_INSTALL_DIR)/usr/bin/php-config
+	$(SED) 's,--with-config-file-path=/etc,--with-config-file-path=$(STAGING_DIR)/etc/php5,g' $(PKG_INSTALL_DIR)/usr/bin/php-config
+	$(SED) 's,--sysconfdir=/etc,--sysconfdir=$(STAGING_DIR)/etc,g' $(PKG_INSTALL_DIR)/usr/bin/php-config
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+endef
+
 define Package/php5/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/php.ini $(1)/etc/

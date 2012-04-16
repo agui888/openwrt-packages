@@ -18,7 +18,7 @@ PKG_SOURCE_URL:=ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
 		ftp://ftp.de.openbsd.org/pub/unix/OpenBSD/OpenSSH/portable/
 PKG_MD5SUM:=afe17eee7e98d3b8550cc349834a85d0
 
-PKG_BUILD_DEPENDS:=libopenssl
+PKG_BUILD_DEPENDS:=+libopenssl +krb5-libs
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -41,7 +41,6 @@ endef
 define Package/openssh-moduli/description
 OpenSSH server moduli file.
 endef
-
 
 define Package/openssh-client
   $(call Package/openssh/Default)
@@ -86,7 +85,12 @@ OpenSSH server.
 endef
 
 define Package/openssh-server/conffiles
-/etc/ssh/sshd_config
+/etc/ssh/moduli
+/etc/shh/sshd_config
+/etc/ssh/ssh_host_dsa_key
+/etc/ssh/ssh_host_dsa_key.pub
+/etc/ssh/ssh_host_rsa_key
+/etc/ssh/ssh_host_rsa_key.pub
 endef
 
 define Package/openssh-sftp-client
@@ -123,7 +127,7 @@ CONFIGURE_ARGS+= \
 	--disable-wtmp \
 	--disable-wtmpx \
 	--without-bsd-auth \
-	--without-kerberos5 \
+	--with-kerberos5 \
 	--without-pam \
 	--without-x
 
@@ -138,6 +142,8 @@ CONFIGURE_ARGS += \
 endif
 
 CONFIGURE_VARS += LD="$(TARGET_CC)"
+EXTRA_LDFLAGS += -lkrb5support
+TARGET_CFLAGS += -I$(STAGING_DIR)/usr/include/krb5
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

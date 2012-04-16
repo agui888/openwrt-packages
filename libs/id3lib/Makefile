@@ -15,7 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/id3lib
 PKG_MD5SUM:=19f27ddd2dda4b2d26a559a4f0f402a7
 
-PKG_FIXUP:=libtool-ucxx
+#PKG_FIXUP:=libtool-ucxx
+PKG_FIXUP:=libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -23,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/id3lib
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib +uclibcxx
+  DEPENDS:=+zlib +libstdcpp
   TITLE:=An ID3v1/ID3v2 tag manipulation library
   URL:=http://www.id3lib.org/
 endef
@@ -35,8 +36,8 @@ CONFIGURE_ARGS += \
 	--enable-static
 
 #CONFIGURE_VARS += \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti"  \
-	LIBS="-nodefaultlibs -lc -lz -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
+#	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti"  \
+#	LIBS="-nodefaultlibs -lc -lz -luClibc++ -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

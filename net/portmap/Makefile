@@ -33,9 +33,9 @@ define Package/portmap/description
 endef
 
 MAKE_FLAGS += \
-	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -DHOSTS_ACCESS -DFACILITY=LOG_DAEMON -DIGNORE_SIGCHLD" \
+	CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS) -DHOSTS_ACCESS -DFACILITY=LOG_DAEMON -DIGNORE_SIGCHLD -I$(STAGING_DIR)/usr/include/tirpc" \
 	RPCUSER="nobody" \
-	LDLIBS="$(TARGET_LDFLAGS) -lwrap $(LIBRPC)" \
+	LDLIBS="$(TARGET_LDFLAGS) -lwrap -ltirpc" \
 	all
 
 define Package/portmap/install

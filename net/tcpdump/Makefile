@@ -65,7 +65,7 @@ ifeq ($(BUILD_VARIANT),mini)
 endif
 
 MAKE_FLAGS += \
-	CCOPT="$(TARGET_CFLAGS)" INCLS="-I. $(TARGET_CPPFLAGS)"
+	CCOPT="$(TARGET_CFLAGS)" INCLS="-I. -I$(STAGING_DIR)/usr/include/tirpc $(TARGET_CPPFLAGS)"
 
 
 define Package/tcpdump/install

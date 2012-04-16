@@ -90,8 +90,9 @@ endef
 
 define BuildPlugin
   define Package/$(1)/install
-	$(INSTALL_DIR) $$(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(2) $$(1)/usr/bin/
+	$(INSTALL_DIR) $$(1)/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(2) $$(1)/bin/
+	if [ "$(2)" == "su" -o "$(2)" == "passwd" ]; then chmod 4755 $$(1)/bin/$(2); fi
   endef
 
   $$(eval $$(call BuildPackage,$(1)))

@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ptunnel
-PKG_VERSION:=0.71
+PKG_VERSION:=0.72
 PKG_RELEASE:=3
 
 PKG_SOURCE:=PingTunnel-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.cs.uit.no/~daniels/PingTunnel
-PKG_MD5SUM:=9b04771d4fa50abc15a6af690b81c71a
+PKG_MD5SUM:=
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/PingTunnel
 

@@ -7,6 +7,8 @@ STOP=50
 SERVICE_USE_PID=1
 
 start() {
+	[ -z `grep sshd /etc/passwd` ] && echo "sshd:x:22:22:sshd:/var/empty/.sshd:/bin/false" >>/etc/passwd
+
 	for type in rsa dsa; do {
 		# check for keys
 		key=/etc/ssh/ssh_host_${type}_key

@@ -1,25 +1,16 @@
-#
-# Copyright (C) 2008-2011 OpenWrt.org
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
-
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=mdadm
-PKG_VERSION:=3.2
+PKG_VERSION:=3.2.3
 PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=@KERNEL/linux/utils/raid/mdadm
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=4ac70ccead74f947bf5aa4d189a977a0
-
-PKG_BUILD_PARALLEL:=1
+PKG_SOURCE_URL:=http://fossies.org/linux/misc
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/mdadm
+define Package/$(PKG_NAME)
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=A tool for managing Soft RAID under Linux
@@ -27,22 +18,16 @@ define Package/mdadm
   MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
-define Package/mdadm/description
- A tool for managing Linux Software RAID arrays.
+define Package/$(PKG_NAME)/description
+  Manages Mulitple Devices (sofware raid)
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS) -DUCLIBC -DHAVE_STDINT_H" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		mdadm mdassemble
-endef
-
-define Package/mdadm/install
-	$(INSTALL_DIR) $(1)/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mdadm $(1)/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mdassemble $(1)/sbin
+define Package/$(PKG_NAME)/install
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/mdadm.init $(1)/etc/init.d/mdadm
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/mdadm $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,mdadm))
+

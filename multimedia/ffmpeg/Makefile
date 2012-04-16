@@ -167,7 +167,7 @@ $(call Package/ffmpeg/Default)
  SECTION:=multimedia
  CATEGORY:=Multimedia
  TITLE+= program
- DEPENDS+= +libpthread +libffmpeg
+ DEPENDS+= +libpthread +libffmpeg +libbz2
  VARIANT:=full
 endef
 
@@ -242,7 +242,7 @@ endef
 define Package/libffmpeg-full
 $(call Package/libffmpeg/Default)
  TITLE+= (full)
- DEPENDS+= @BUILD_PATENTED +alsa-lib
+ DEPENDS+= @BUILD_PATENTED
  VARIANT:=full
 endef
 
@@ -292,6 +292,7 @@ FFMPEG_CONFIGURE:= \
 	--enable-small \
 	--disable-stripping \
 	--enable-zlib \
+	--disable-outdevs \
 
 ifeq ($(BUILD_VARIANT),custom)
 

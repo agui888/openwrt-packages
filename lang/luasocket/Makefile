@@ -35,6 +35,8 @@ endef
 define Build/Configure
 endef
 
+#TARGET_CFLAGS += -std=gnu99
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/ \
 		LIBDIR="$(TARGET_LDFLAGS)" \

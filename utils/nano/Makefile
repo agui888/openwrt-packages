@@ -27,7 +27,7 @@ define Package/nano
   TITLE:=An enhanced clone of the Pico text editor
   URL:=http://www.nano-editor.org/
   MAINTAINER:=Bernhard Loos <bernhardloos@googlemail.com>
-  DEPENDS:=+libncurses
+  DEPENDS:=+libncursesw
 endef
 
 define Package/nano/description
@@ -38,11 +38,13 @@ endef
 CONFIGURE_ARGS += \
 	--enable-tiny \
 	--disable-glibtest \
-	--disable-utf8 \
+	--enable-utf8 \
 	--without-slang \
 
 CONFIGURE_VARS += \
 	ac_cv_header_regex_h=no \
+
+TARGET_CFLAGS += -DNEED_XOPEN_SOURCE_EXTENDED
 
 define Package/nano/install
 	$(INSTALL_DIR) $(1)/usr/bin

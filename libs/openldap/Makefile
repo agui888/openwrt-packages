@@ -48,6 +48,7 @@ endef
 
 define Package/libopenldap/conffiles
 /etc/openldap/ldap.conf
+/etc/openldap
 endef
 
 define Package/openldap-utils

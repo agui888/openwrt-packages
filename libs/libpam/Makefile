@@ -24,7 +24,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libpam
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=@BROKEN
   TITLE:=free implementation of the following DCE-RFC from Sunsoft.
   URL:=http://www.kernel.org/pub/linux/libs/pam
 endef
@@ -55,15 +54,26 @@ endef
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/lib
 	$(INSTALL_DIR) $(1)/usr/include
+	$(INSTALL_DIR) $(1)/usr/include/security
 	$(CP) $(PKG_INSTALL_DIR)/lib/* $(1)/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(1)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/security/* $(1)/usr/include/security
+endef
+
+define Package/libpam/conffiles
+/etc/security
+/etc/pam.conf
 endef
 
 define Package/libpam/install
 	$(INSTALL_DIR) $(1)/lib
+	$(INSTALL_DIR) $(1)/lib/security
+	$(INSTALL_DIR) $(1)/lib/security/pam_filter
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/lib/* $(1)/lib/
+	$(INSTALL_DIR) $(1)/lib
+	$(CP) $(PKG_INSTALL_DIR)/lib/*.so* $(1)/lib/
+	$(CP) $(PKG_INSTALL_DIR)/lib/security/*.so* $(1)/lib/security
+	$(CP) $(PKG_INSTALL_DIR)/lib/security/pam_filter/* $(1)/lib/security/pam_filter
 	$(CP) $(PKG_INSTALL_DIR)/etc/* $(1)/etc/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/* $(1)/usr/sbin/
 endef

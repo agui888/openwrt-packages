@@ -9,11 +9,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=oprofile
 PKG_VERSION:=0.9.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/oprofile/
-PKG_MD5SUM:=8b5d1d9b65f84420bcc3234777ad3be3
+PKG_MD5SUM:=
 
 PKG_BUILD_DEPENDS:=binutils
 PKG_FIXUP:=libtool
@@ -31,7 +31,7 @@ define Package/oprofile
 endef
 
 define Package/oprofile/description
- A transparent low-overhead system-wide profiler.
+  A transparent low-overhead system-wide profiler.
 endef
 
 define Package/oprofile-utils
@@ -40,6 +40,10 @@ define Package/oprofile-utils
   TITLE:=OProfile System Profiler (extra utilities)
   URL:=http://oprofile.sourceforge.net
   DEPENDS:=oprofile
+endef
+
+define Package/oprofile-utils/description
+  OProfile System Profiler (extra utilities)
 endef
 
 define Build/Configure

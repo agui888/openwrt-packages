@@ -34,7 +34,7 @@ endef
 define Package/nfs-kernel-server
   $(call Package/nfs-kernel-server/Default)
   TITLE:=Kernel NFS server support
-  DEPENDS+= +kmod-fs-nfsd +kmod-fs-nfs +portmap
+  DEPENDS+= +kmod-fs-nfsd +kmod-fs-nfs +rpcbind
 endef
 
 define Package/nfs-kernel-server/description
@@ -67,7 +67,7 @@ define Package/nfs-utils/description
   Updated mount.nfs command - allows mounting nfs4 volumes
 endef
 
-TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib -I$(STAGING_DIR)/usr/include -Drpc_uint=uint
+TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/tirpc -Drpc_uint=uint
 TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib $(LIBRPC)
 
 CONFIGURE_ARGS += \

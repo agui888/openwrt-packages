@@ -29,7 +29,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libmysqlclient/Default
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+uclibcxx +zlib
+  DEPENDS:=+libstdcpp +zlib
   TITLE:=MySQL client library
   URL:=http://dev.mysql.com/
 endef
@@ -56,14 +56,14 @@ define Package/libmysqlclient_r
   TITLE += threadsafe
 endef
 
-TARGET_CXX=g++-uc
+#TARGET_CXX=g++-uc
 
-CONFIGURE_VARS += \
-        CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
-        CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
-        LDFLAGS="$$$$LDFLAGS" \
-        LIBS="-nodefaultlibs -luClibc++ -lm -lc $(LIBGCC_S)" \
-        CLIENTCLIBS="-nodefaultlibs -luClibc++ -lm -lc $(LIBGCC_S)" \
+#CONFIGURE_VARS += \
+#        CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
+#        CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
+#        LDFLAGS="$$$$LDFLAGS" \
+#        LIBS="-nodefaultlibs -luClibc++ -lm -lc $(LIBGCC_S)" \
+#        CLIENTCLIBS="-nodefaultlibs -luClibc++ -lm -lc $(LIBGCC_S)" \
 
 
 define Build/Configure

@@ -219,6 +219,12 @@ define Package/lighttpd-mod-webdav
   TITLE:=WebDAV module
 endef
 
+define Package/lighttpd-mod-h264-streaming
+  $(call Package/lighttpd/Default)
+  DEPENDS:=lighttpd
+  TITLE:=H264 streaming module
+endef
+
 CONFIGURE_ARGS+= \
 	--libdir=/usr/lib/lighttpd \
 	--sysconfdir=/etc/lighttpd \
@@ -325,3 +331,5 @@ $(eval $(call BuildPlugin,lighttpd-mod-trigger-b4-dl,trigger_b4_dl))
 $(eval $(call BuildPlugin,lighttpd-mod-userdir,userdir))
 $(eval $(call BuildPlugin,lighttpd-mod-usertrack,usertrack))
 $(eval $(call BuildPlugin,lighttpd-mod-webdav,webdav))
+$(eval $(call BuildPlugin,lighttpd-mod-h264-streaming,h264_streaming))
+

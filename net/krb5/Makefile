@@ -9,6 +9,7 @@ PKG_SOURCE_URL:=http://web.mit.edu/kerberos/dist/krb5/$(PKG_VERSION)/
 PKG_MD5SUM:=74257d68373a8df8b9391fc093d594be
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DEPENDS:=+libopenldap
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
@@ -16,6 +17,7 @@ PKG_INSTALL:=1
 include $(INCLUDE_DIR)/package.mk
 
 MAKE_PATH:=src
+EXTRA_LDFLAGS += -llber -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
 define Package/krb5/Default
 	SECTION:=net
@@ -29,7 +31,7 @@ define Package/krb5-libs
 	SECTION:=net
 	CATEGORY:=Network
 	TITLE:=Kerberos
-	DEPENDS:=+libncurses
+	DEPENDS:=+libncurses +libopenldap +libkeyutils
 	TITLE:=Kerberos 5 Shared Libraries
 	URL:=http://web.mit.edu/kerberos/
 	MAINTAINER:=W. Michael Petullo <mike@flyn.org>
@@ -39,6 +41,12 @@ define Package/krb5-server
 	$(call Package/krb5/Default)
 	DEPENDS:=+krb5-libs +libpthread
 	TITLE:=Kerberos 5 Server
+endef
+
+define Package/krb5-ldap
+	$(call Package/krb5/Default)
+	DEPENDS:=+krb5-libs
+	TITLE:=Kerberos 5 ldap support
 endef
 
 define Package/krb5-client
@@ -57,6 +65,7 @@ define Build/Prepare
 	tar xzf "$(BUILD_DIR)/krb5-$(PKG_VERSION).tar.gz" -C "$(BUILD_DIR)"
 	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/001-krb5kdc-dir-to-etc.patch"
 	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/002-MITKRB5-SA-2011-002.patch"
+	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/100-kadmin-use-dns.patch"
 endef
 
 CONFIGURE_PATH = ./src
@@ -64,6 +73,7 @@ CONFIGURE_PATH = ./src
 CONFIGURE_VARS += \
 	cross_compiling=yes \
 	krb5_cv_attr_constructor_destructor=yes,yes \
+	krb5_cv_sys_rcdir=/tmp \
 	ac_cv_func_regcomp=yes \
 	ac_cv_printf_positional=yes \
 	ac_cv_file__etc_environment=no \
@@ -73,6 +83,12 @@ CONFIGURE_ARGS += \
 	--enable-thread-support \
 	--without-krb4 \
 	--without-tcl \
+	--with-ldap \
+	--with-size-optimizations \
+	--without-hdb \
+	--without-db2 \
+	--without-pam \
+	--enable-dns-for-realm \
 	--disable-ipv6
 
 define Build/InstallDev
@@ -84,6 +100,10 @@ define Build/InstallDev
 		$(1)/usr
 endef
 
+define Package/krb5-libs/conffiles
+/etc/krb*
+endef
+
 define Package/krb5-libs/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DIR) $(1)/usr/lib/krb5
@@ -91,6 +111,7 @@ define Package/krb5-libs/install
 	$(INSTALL_DIR) $(1)/usr/lib/krb5/plugins/kdb
 	$(INSTALL_DIR) $(1)/usr/lib/krb5/plugins/libkrb5
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/krb5/plugins/kdb/db2.so $(1)/usr/lib/krb5/plugins/kdb
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/krb5/plugins/kdb/kldap.so $(1)/usr/lib/krb5/plugins/kdb
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib
 endef
 
@@ -102,6 +123,7 @@ define Package/krb5-client/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/kpasswd $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ksu $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/kvno $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/kadmin $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/krb5-send-pr $(1)/usr/sbin
 endef
@@ -115,7 +137,7 @@ define Package/krb5-server/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/sclient $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kadmin.local $(1)/usr/sbin
-#	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kadmind $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kadmind $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kdb5_util $(1)/usr/sbin
 #	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kprop $(1)/usr/sbin
 #	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kpropd $(1)/usr/sbin
@@ -123,6 +145,14 @@ define Package/krb5-server/install
 #	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/sim_server $(1)/usr/sbin
 endef
 
+define Package/krb5-ldap/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kdb5_ldap_util $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/etc/openldap/schema
+	$(CP) $(PKG_BUILD_DIR)/src/plugins/kdb/ldap/libkdb_ldap/kerberos.schema $(1)/etc/openldap/schema
+endef
+
 $(eval $(call BuildPackage,krb5-libs))
 $(eval $(call BuildPackage,krb5-server))
 $(eval $(call BuildPackage,krb5-client))
+$(eval $(call BuildPackage,krb5-ldap))

@@ -8,19 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=smartmontools
-PKG_VERSION:=5.40
+PKG_VERSION:=5.42
 PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/smartmontools
-PKG_MD5SUM:=0f0be0239914ad87830a4fff594bda5b
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/smartmontools/Default
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+uclibcxx
+  DEPENDS:=+libstdcpp
   TITLE:=S.M.A.R.T Monitoring
   URL:=http://smartmontools.sourceforge.net/
 endef
@@ -39,7 +38,6 @@ endef
 
 define Package/smartd
   $(call Package/smartmontools/Default)
-  DEPENDS+= +rsync
   TITLE+= Daemon
 endef
 
@@ -51,12 +49,6 @@ define Package/smartd/description
 endef
 
 # uses GNU configure
-
-CONFIGURE_VARS += \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
-	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -lc -luClibc++ -lm $(LIBGCC_S) -lc" \
 
 define Build/Configure
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
