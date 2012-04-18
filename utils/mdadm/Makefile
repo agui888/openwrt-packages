@@ -6,7 +6,7 @@ PKG_VERSION:=3.2.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://fossies.org/linux/misc
+PKG_SOURCE_URL:=@KERNEL/linux/utils/raid/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
