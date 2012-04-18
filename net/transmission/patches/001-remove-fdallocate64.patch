@@ -1,0 +1,14 @@
+--- transmission-2.40b3/libtransmission/fdlimit.c.orig	2011-10-06 01:10:27.368177336 +0200
++++ transmission-2.40b3/libtransmission/fdlimit.c	2011-10-06 01:11:16.141235501 +0200
+@@ -25,11 +25,6 @@
+  #include <fcntl.h>
+ #endif
+ 
+-#ifdef HAVE_FALLOCATE64
+-  /* FIXME can't find the right #include voodoo to pick up the declaration.. */
+-  extern int fallocate64( int fd, int mode, uint64_t offset, uint64_t len );
+-#endif
+-
+ #ifdef HAVE_XFS_XFS_H
+  #include <xfs/xfs.h>
+ #endif
