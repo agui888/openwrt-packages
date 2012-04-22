@@ -16,7 +16,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://download.osgeo.org/libtiff
 PKG_MD5SUM:=93e56e421679c591de7552db13384cb8
 
-PKG_FIXUP:=libtool-ucxx
+PKG_FIXUP:=libtool
 PKG_REMOVE_FILES:=autogen.sh aclocal.m4
 
 PKG_INSTALL:=1
@@ -43,7 +43,7 @@ $(call Package/tiff/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= library(c++ bindings)
-  DEPENDS:=+libtiff +uclibcxx
+  DEPENDS:=+libtiff
 endef
 
 define Package/tiff-utils

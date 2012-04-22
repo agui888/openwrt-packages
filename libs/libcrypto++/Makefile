@@ -8,12 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libcrypto++
-PKG_VERSION:=5.6.0
+PKG_VERSION:=5.6.1
 PKG_RELEASE:=2
 
-PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
-PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/libc/libcrypto++/
-PKG_MD5SUM:=681f830145bf93cbc16113eaf61fbe2a
+
+PKG_SOURCE:=cryptopp561.zip
+PKG_SOURCE_URL:=http://www.cryptopp.com
+
+#PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).debian.tar.gz
+#PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
+#PKG_SOURCE_URL:=http://ftp.de.debian.org/debian/pool/main/libc/libcrypto++/
+#PKG_MD5SUM:=681f830145bf93cbc16113eaf61fbe2a
 
 PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 GNUmakefile
@@ -29,10 +34,16 @@ define Package/libcryptoxx
   URL:=http://packages.debian.org/sid/libcrypto++-dev
 endef
 
-define Package/package/libcryptoxx
+define Package/libcryptoxx/description
   Crypto++ is library for creating C++ programs which use cryptographic algorithms.
   The library uses a Pipes & Filters architecture with heavy use of templates and
   abstract base classes.
+endef
+
+define Build/Prepare
+	mkdir -p $(PKG_BUILD_DIR)
+	unzip -d $(PKG_BUILD_DIR) $(DL_DIR)/$(PKG_SOURCE)
+	$(call Build/Patch/Default)
 endef
 
 CONFIGURE_ARGS += \

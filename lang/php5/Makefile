@@ -459,6 +459,8 @@ define Package/php5/conffiles
 /etc/php.ini
 endef
 
+EXTRA_CFLAGS = -lrt
+
 define Build/Compile
         $(MAKE) -C $(PKG_BUILD_DIR) INSTALL_ROOT="$(PKG_INSTALL_DIR)" all install
 endef
