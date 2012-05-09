@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=ipset
 PKG_VERSION:=6.11
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ipset.netfilter.org
@@ -34,10 +34,11 @@ $(call Package/ipset/Default)
   URL:=http://ipset.netfilter.org/
 endef
 
-include $(INCLUDE_DIR)/kernel-defaults.mk
-
 CONFIGURE_ARGS += \
 	--with-kbuild="$(LINUX_DIR)"
+
+MAKE_FLAGS += \
+	ARCH="$(LINUX_KARCH)"
 
 IPSET_MODULES:= \
 	ipset/ip_set \
