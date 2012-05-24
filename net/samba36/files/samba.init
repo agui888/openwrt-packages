@@ -47,6 +47,13 @@ smb_header() {
 	    -e "s#|CHARSET|#$charset#g" \
 	    /etc/samba/smb.conf.template > /var/etc/smb.conf
 
+	[ -f /etc/samba/samba.keytab ] && {
+		REALM=`klist -k /etc/samba/samba.keytab | awk 'FS="@" { if ($2 != "") { print $2; exit } }'`
+		echo -e "\tkerberos method = dedicated keytab" >> /var/etc/smb.conf
+		echo -e "\tdedicated keytab file = /etc/samba/samba.keytab" >> /var/etc/smb.conf
+		echo -e "\trealm = $REALM" >> /var/etc/smb.conf
+	}
+
 	local homes
 	config_get_bool homes $1 homes 0
 	[ $homes -gt 0 ] && {

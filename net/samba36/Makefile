@@ -15,6 +15,7 @@ PKG_SOURCE_URL:=http://ftp.samba.org/pub/samba \
 	http://ftp.samba.org/pub/samba/old-versions
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_MD5SUM:=2f0c14547333c1b48fd4728b031e7040
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -28,6 +29,7 @@ define Package/samba36-server
   CATEGORY:=Network
   TITLE:=Samba 3.6 SMB/CIFS server
   URL:=http://www.samba.org/
+  VARIANT:=samba36-server
 endef
 
 define Package/samba36-client
@@ -50,6 +52,24 @@ define Package/samba36-server/description
  SMB protocol for UNIX systems, allowing you to serve files and printers to
  Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred
  to as the LanManager or Netbios protocol.
+endef
+
+define Package/samba36-server-ads
+$(call Package/samba36-server)
+  TITLE:=Samba 3.6 SMB/CIFS server with ADS support
+  VARIANT:=samba36-server-ads
+  DEPENDS:=+libpopt +libuuid +libopenldap +krb5-libs +libiconv +libacl +libreadline
+endef
+
+define Package/samba36-server-ads/description
+$(call Package/samba36-server/description)
+endef
+
+define Package/samba36-server-ads/config
+	config PACKAGE_SAMBA_MAX_DEBUG_LEVEL
+		int "Maximum level of compiled-in debug messages"
+		depends PACKAGE_samba36-server-ads || PACKAGE_samba36-client
+		default -1
 endef
 
 TARGET_CFLAGS += -DMAX_DEBUG_LEVEL=$(CONFIG_PACKAGE_SAMBA_MAX_DEBUG_LEVEL) -D__location__=\\\"\\\" -ffunction-sections -fdata-sections
@@ -110,6 +130,39 @@ CONFIGURE_ARGS += \
 
 MAKE_FLAGS += DYNEXP= PICFLAG= MODULES=
 
+ifeq ($(BUILD_VARIANT),samba36-server-ads)
+	TARGET_CFLAGS += \
+		-I$(STAGING_DIR)/usr/include/krb5 \
+		-I$(STAGING_DIR)/usr/include/tirpc \
+		-DACTIVE_DIRECTORY \
+		-DDFS_SUPPORT \
+		-DNETLOGON_SUPPORT \
+		-DSAMR_SUPPORT \
+		-DLSA_SUPPORT
+
+	TARGET_LDFLAGS += \
+		-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -lkrb5 \
+		-L$(STAGING_DIR)/usr/lib/libiconv/lib \
+		-lkrb5 -lcom_err -ldl -ltirpc
+
+	CONFIGURE_VARS += \
+		ac_cv_lib_ext_krb5_krb5_mk_req_extended=yes \
+		ac_cv_path_KRB5CONFIG=$(STAGING_DIR)/usr \
+		smb_krb5_cv_enctype_to_string_takes_krb5_context_arg=no \
+		smb_krb5_cv_enctype_to_string_takes_size_t_arg=yes
+
+	CONFIGURE_ARGS := $(filter-out --without-ads --without-krb5 --without-ldap, ${CONFIGURE_ARGS})
+	CONFIGURE_ARGS += \
+		--with-ads \
+		--with-krb5=$(STAGING_DIR)/usr \
+		--with-ldap \
+		--with-libiconv=$(STAGING_DIR)/usr/lib/libiconv \
+		--with-acl-support \
+		--with-quotas \
+		--with-syslog \
+		--with-shared-modules=all
+endif
+
 define Package/samba36-server/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/samba.config $(1)/etc/config/samba
@@ -125,6 +178,17 @@ define Package/samba36-server/install
 	ln -sf samba_multicall $(1)/usr/sbin/smbd
 	ln -sf samba_multicall $(1)/usr/sbin/nmbd
 	ln -sf samba_multicall $(1)/usr/sbin/smbpasswd
+	ln -sf samba_multicall $(1)/usr/bin/smbcontrol
+	ln -sf samba_multicall $(1)/usr/bin/smbtree
+	ln -sf samba_multicall $(1)/usr/bin/smbstatus
+	ln -sf samba_multicall $(1)/usr/bin/smbcquotas
+	ln -sf samba_multicall $(1)/usr/bin/smbcacls
+	ln -sf samba_multicall $(1)/usr/bin/nmblookup
+	ln -sf samba_multicall $(1)/usr/bin/testparm
+endef
+
+define Package/samba36-server-ads/install
+	$(call Package/samba36-server/install,$(1))	
 endef
 
 define Package/samba36-client/install
@@ -135,4 +199,4 @@ endef
 
 $(eval $(call BuildPackage,samba36-client))
 $(eval $(call BuildPackage,samba36-server))
-
+$(eval $(call BuildPackage,samba36-server-ads))
