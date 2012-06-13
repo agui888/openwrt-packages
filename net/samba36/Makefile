@@ -178,13 +178,14 @@ define Package/samba36-server/install
 	ln -sf samba_multicall $(1)/usr/sbin/smbd
 	ln -sf samba_multicall $(1)/usr/sbin/nmbd
 	ln -sf samba_multicall $(1)/usr/sbin/smbpasswd
-	ln -sf samba_multicall $(1)/usr/bin/smbcontrol
-	ln -sf samba_multicall $(1)/usr/bin/smbtree
-	ln -sf samba_multicall $(1)/usr/bin/smbstatus
-	ln -sf samba_multicall $(1)/usr/bin/smbcquotas
-	ln -sf samba_multicall $(1)/usr/bin/smbcacls
-	ln -sf samba_multicall $(1)/usr/bin/nmblookup
-	ln -sf samba_multicall $(1)/usr/bin/testparm
+	$(INSTALL_DIR) $(1)/usr/bin
+	ln -sf ../sbin/samba_multicall $(1)/usr/bin/smbcontrol
+	ln -sf ../sbin/samba_multicall $(1)/usr/bin/smbtree
+	ln -sf ../sbin/samba_multicall $(1)/usr/bin/smbstatus
+	ln -sf ../sbin/samba_multicall $(1)/usr/bin/smbcquotas
+	ln -sf ../sbin/samba_multicall $(1)/usr/bin/smbcacls
+	ln -sf ../sbin/samba_multicall $(1)/usr/bin/nmblookup
+	ln -sf ../sbin/samba_multicall $(1)/usr/bin/testparm
 endef
 
 define Package/samba36-server-ads/install
