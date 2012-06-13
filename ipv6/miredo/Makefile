@@ -15,7 +15,7 @@ PKG_SOURCE_URL:=http://www.remlab.net/files/miredo
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_MD5SUM:=1281e7e75bddbde244cd778d99fa22d4
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -67,7 +67,8 @@ CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++"  \
 	LIBS="-nodefaultlibs -lc -luClibc++ -lm" \
-	ac_cv_file__proc_self_maps=yes\
+	ac_cv_file__proc_self_maps=yes \
+	ac_cv_header_sys_capability_h=no \
 
 # XXX: override (:=), don't append (+=)
 MAKE_FLAGS := \

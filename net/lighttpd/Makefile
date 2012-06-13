@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://download.lighttpd.net/lighttpd/releases-1.4.x
 PKG_MD5SUM:=4630517b8342d4ec0a2d61a0a9e05c82
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
@@ -38,7 +38,7 @@ define Package/lighttpd/config
 config LIGHTTPD_SSL
 	bool "SSL support"
 	depends on PACKAGE_lighttpd
-	default y if PACKAGE_libopenssl
+	default y
 	help
 	  Implements SSL support in lighttpd (using libopenssl). This
 	  option is required if you enable the SSL engine in your

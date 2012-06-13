@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=samba
 PKG_VERSION:=3.6.5
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_URL:=http://ftp.samba.org/pub/samba \
 	http://ftp.samba.org/pub/samba/old-versions
@@ -37,6 +37,7 @@ define Package/samba36-client
   CATEGORY:=Network
   TITLE:=Samba 3.6 SMB/CIFS client
   URL:=http://www.samba.org/
+  DEPENDS:=+libreadline +libncurses
 endef
 
 define Package/samba36-server/config

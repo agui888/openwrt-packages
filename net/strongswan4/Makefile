@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2010-2011 OpenWrt.org
+# Copyright (C) 2010-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=strongswan
 PKG_VERSION:=4.5.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.strongswan.org/
@@ -69,10 +69,6 @@ PKG_MOD_AVAILABLE:= \
 	x509 \
 	xauth \
 	xcbc \
-
-PKG_BUILD_DEPENDS:= \
-	PACKAGE_strongswan4-libfast:clearsilver \
-	PACKAGE_strongswan4-libfast:fcgi \
 
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_STRONGSWAN4_ENABLE_CISCO_QUIRKS \
@@ -293,7 +289,7 @@ endef
 define Package/strongswan4-libfast
 $(call Package/strongswan4/Default)
   TITLE+= libfast
-  DEPENDS:= +strongswan4
+  DEPENDS:= +strongswan4 +PACKAGE_strongswan4-libfast:zlib +PACKAGE_strongswan4-libfast:fcgi
 endef
 
 define Package/strongswan4-libfast/description
@@ -474,7 +470,7 @@ $(eval $(call BuildPlugin,load-tester,load testing,))
 $(eval $(call BuildPlugin,md5,MD5 crypto,))
 $(eval $(call BuildPlugin,medcli,mediation client configuration database,))
 $(eval $(call BuildPlugin,medsrv,mediation server configuration database,))
-$(eval $(call BuildPlugin,mysql,MySQL database interface,+strongswan4-mod-sql +PACKAGE_strongswan4-mod-mysql:libmysqlclient))
+$(eval $(call BuildPlugin,mysql,MySQL database interface,+strongswan4-mod-sql +PACKAGE_strongswan4-mod-mysql:libmysqlclient-r))
 $(eval $(call BuildPlugin,padlock,VIA PadLock crypto,@TARGET_x86))
 $(eval $(call BuildPlugin,pem,PEM decoding,))
 $(eval $(call BuildPlugin,pgp,PGP key decoding,))

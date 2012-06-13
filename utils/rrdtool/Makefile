@@ -21,7 +21,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_python-rrd \
 	CONFIG_PACKAGE_rrdcgi \
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL:=1
 
@@ -40,7 +40,7 @@ $(call Package/rrdtool/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= management library (v1.2.x)
-  DEPENDS+= +libart +libfreetype +libpng +zlib
+  DEPENDS+= +libart +libfreetype +libpng +zlib +libpthread
 endef
 
 define Package/rrdcgi

@@ -46,7 +46,6 @@ LCD4LINUX_DRIVERS:= \
 	M50530 \
 	MatrixOrbital \
 	MatrixOrbitalGX \
-	mda166a \
 	MilfordInstruments \
 	Newhaven \
 	Noritake \
@@ -116,7 +115,7 @@ LCD4LINUX_PLUGINS:= \
 	xmms \
 #	python \
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)

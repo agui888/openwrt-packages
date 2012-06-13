@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.cti.ecp.fr/~beauxir5/peercast
 PKG_MD5SUM:=4e8449cde7135ad97f788e67e1bd64ee
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 acinclude.m4
 
 PKG_INSTALL:=1
@@ -47,7 +47,7 @@ CONFIGURE_ARGS += \
 CONFIGURE_VARS += \
 	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++" \
 	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-	LIBS="-nodefaultlibs -lc -luClibc++ -lpthread" \
+	LIBS="-nodefaultlibs -lc -luClibc++ -lpthread -lgcc_s" \
 
 define Package/peercast/install
 	$(INSTALL_DIR) $(1)/usr/sbin

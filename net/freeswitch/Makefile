@@ -26,7 +26,7 @@ PKG_SOURCE:=$(PKG_SOURCE_SUBDIR)-$(shell echo $(PKG_REV)|cut -b -9).tar.bz2
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 
-PKG_FIXUP:=libtool
+PKG_FIXUP:=autoreconf
 PKG_BUILD_PARALLEL:=1
 
 
@@ -173,7 +173,7 @@ endef
 define Package/$(PKG_NAME)
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH open source telephony platform
-  DEPENDS:= +libreadline +libncurses +libpthread +libstdcpp
+  DEPENDS:= +libreadline +libncurses +libpthread +libstdcpp +libopenssl +libpq +librt +zlib
   MENU:=1
 endef
 

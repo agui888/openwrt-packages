@@ -18,7 +18,7 @@ PKG_MD5SUM:=1b76932ca7c4b2aa992941e41ed4594b
 PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=intltool/host
 
-PKG_FIXUP = libtool
+PKG_FIXUP:=autoreconf
 
 PKG_INSTALL = 1
 
@@ -30,7 +30,7 @@ define Package/pulseaudio/Default
   SECTION:=sound
   CATEGORY:=Sound
   DEPENDS:=+libspeexdsp +libsndfile +libltdl +libpthread \
-	+librt +alsa-lib +libjson $(ICONV_DEPENDS) $(INTL_DEPENDS) \
+	+librt +alsa-lib +libjson +libopenssl +udev $(ICONV_DEPENDS) $(INTL_DEPENDS) \
 	@!UCLIBC_VERSION_0_9_30_1 @!UCLIBC_VERSION_0_9_30_2 \
 	@!UCLIBC_VERSION_0_9_30_3
   TITLE:=Network sound server
