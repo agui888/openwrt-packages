@@ -1,0 +1,26 @@
+--- mc-4.7.5.3/configure.orig	2012-06-18 23:42:14.217582832 +0200
++++ mc-4.7.5.3/configure	2012-06-18 23:43:25.510205937 +0200
+@@ -24120,13 +24120,12 @@
+ 
+ else
+ 
+-	 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pmap_set in -lrpc" >&5
+-$as_echo_n "checking for pmap_set in -lrpc... " >&6; }
++	 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pmap_set" >&5
++$as_echo_n "checking for pmap_set... " >&6; }
+ if ${ac_cv_lib_rpc_pmap_set+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lrpc  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -24158,7 +24157,6 @@
+ $as_echo "$ac_cv_lib_rpc_pmap_set" >&6; }
+ if test "x$ac_cv_lib_rpc_pmap_set" = xyes; then :
+ 
+-	   LIBS="-lrpc $LIBS"
+ 	  $as_echo "#define HAVE_PMAP_SET 1" >>confdefs.h
+ 
+ 
