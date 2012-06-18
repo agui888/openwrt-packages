@@ -43,7 +43,7 @@ define Package/libcurl
   $(call Package/curl/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libopenssl +zlib
+  DEPENDS:=+libopenssl +zlib +librt
   TITLE:=A client-side URL transfer library
 endef
 

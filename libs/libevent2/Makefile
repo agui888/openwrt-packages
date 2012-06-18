@@ -28,6 +28,7 @@ define Package/libevent2/Default
   CATEGORY:=Libraries
   TITLE:=Event notification
   URL:=http://www.monkey.org/~provos/libevent/
+  DEPENDS:=+librt
 endef
 
 define Package/libevent2/Default/description

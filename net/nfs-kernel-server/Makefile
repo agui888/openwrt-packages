@@ -59,7 +59,7 @@ define Package/nfs-utils
   $(call Package/nfs-kernel-server/Default)
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS+= +libevent +USE_UCLIBC:librpc
+  DEPENDS+= +libevent $(LIBRPC_DEPENDS)
   TITLE:=updated mount utility (includes nfs4)
 endef
 
@@ -67,7 +67,7 @@ define Package/nfs-utils/description
   Updated mount.nfs command - allows mounting nfs4 volumes
 endef
 
-TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/tirpc -Drpc_uint=uint
+TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib -I$(STAGING_DIR)/usr/include $(LIBRPC_INCLUDE) -Drpc_uint=uint
 TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib $(LIBRPC)
 
 CONFIGURE_ARGS += \
@@ -77,7 +77,6 @@ CONFIGURE_ARGS += \
 	--enable-static \
 	--enable-shared \
 	--disable-caps \
-	--disable-tirpc \
 	--disable-nfsdcld
 
 CONFIGURE_VARS += \

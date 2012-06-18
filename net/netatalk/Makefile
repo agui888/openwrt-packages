@@ -25,7 +25,7 @@ define Package/netatalk
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Filesystem
-  DEPENDS:=+libdb47 +libgcrypt +libopenssl $(LIBRPC_DEPENDS)
+  DEPENDS:=+libdb47 +libgcrypt +libopenssl $(LIBRPC_DEPENDS) +libacl
   TITLE:=netatalk
   URL:=http://netatalk.sourceforge.net
   MAINTAINER:=W. Michael Petullo <mike@flyn.org>
@@ -41,7 +41,7 @@ define Package/netatalk/conffiles
 /etc/netatalk/afpd.conf
 endef
 
-TARGET_CFLAGS += -std=gnu99 -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+TARGET_CFLAGS += $(LIBRPC_INCLUDE) -std=gnu99 -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 TARGET_LDFLAGS += $(LIBRPC)
 
 CONFIGURE_ARGS += \

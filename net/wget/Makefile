@@ -25,6 +25,7 @@ define Package/wget/Default
   SUBMENU:=File Transfer
   TITLE:=Non-interactive network downloader
   URL:=http://www.gnu.org/software/wget/index.html
+  DEPENDS:= +librt
 endef
 
 define Package/wget/Default/description

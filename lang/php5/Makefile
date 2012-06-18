@@ -52,7 +52,7 @@ define Package/php5/Default
   TITLE:=PHP5 Hypertext preprocessor
   URL:=http://www.php.net/
   MAINTAINER:=Michael Heimpold <mhei@heimpold.de>
-  DEPENDS:=php5
+  DEPENDS:=php5 +librt
 endef
 
 define Package/php5/Default/description

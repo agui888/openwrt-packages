@@ -72,6 +72,9 @@ CONFIGURE_ARGS += \
 	--without-vfs
 endif
 
+TARGET_CFLAGS += $(LIBRPC_INCLUDE)
+TARGET_LDFLAGS += $(LIBRPC)
+
 define Package/mc/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/mc $(1)/usr/bin

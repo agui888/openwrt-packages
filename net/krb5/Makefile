@@ -45,7 +45,7 @@ endef
 
 define Package/krb5-ldap
 	$(call Package/krb5/Default)
-	DEPENDS:=+krb5-libs
+	DEPENDS:=+krb5-libs +libpthread
 	TITLE:=Kerberos 5 ldap support
 endef
 

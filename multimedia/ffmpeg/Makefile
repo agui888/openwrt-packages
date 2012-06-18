@@ -167,7 +167,7 @@ $(call Package/ffmpeg/Default)
  SECTION:=multimedia
  CATEGORY:=Multimedia
  TITLE+= program
- DEPENDS+= +libpthread +libffmpeg +libbz2
+ DEPENDS+= +libpthread +libffmpeg +libbz2 +libffmpeg-full
  VARIANT:=full
 endef
 
@@ -242,7 +242,7 @@ endef
 define Package/libffmpeg-full
 $(call Package/libffmpeg/Default)
  TITLE+= (full)
- DEPENDS+= @BUILD_PATENTED
+ DEPENDS+= @BUILD_PATENTED +alsa-lib
  VARIANT:=full
 endef
 

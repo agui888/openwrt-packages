@@ -59,7 +59,7 @@ define Package/samba36-server-ads
 $(call Package/samba36-server)
   TITLE:=Samba 3.6 SMB/CIFS server with ADS support
   VARIANT:=samba36-server-ads
-  DEPENDS:=+libpopt +libuuid +libopenldap +krb5-libs +libiconv +libacl +libreadline
+  DEPENDS:=+libpopt +libuuid +libopenldap +krb5-libs +libiconv +libacl +libreadline +librt +libtirpc
 endef
 
 define Package/samba36-server-ads/description
