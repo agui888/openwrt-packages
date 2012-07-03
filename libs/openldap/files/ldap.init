@@ -1,12 +1,14 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2009-2011 OpenWrt.org
 
-START=60
+START=61
 
 SERVICE_USE_PID=1
+DATADIR=/etc/openldap/data
+PIDFILE=/var/run/slapd.pid
 
 start() {
-	mkdir -m 0755 -p /var/openldap-data
+	mkdir -m 0755 -p $DATADIR
 	service_start /usr/sbin/slapd
 }
 

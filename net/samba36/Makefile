@@ -191,6 +191,14 @@ endef
 
 define Package/samba36-server-ads/install
 	$(call Package/samba36-server/install,$(1))	
+	mkdir -p $(1)/etc/openldap/schema
+	$(CP) $(PKG_BUILD_DIR)/examples/LDAP/samba.schema $(1)/etc/openldap/schema
+endef
+
+define Package/samba36-server-ads/conffiles
+/etc/samba/samba.keytab
+/etc/samba/secrets.tdb
+/etc/samba/smb.conf.template
 endef
 
 define Package/samba36-client/install

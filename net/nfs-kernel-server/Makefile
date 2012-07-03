@@ -18,7 +18,7 @@ HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/nfs-utils-$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/nfs-utils-$(PKG_VERSION)
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
-PKG_BUILD_DEPENDS:=$(PKG_NAME)/host
+PKG_BUILD_DEPENDS:=$(PKG_NAME)/host krb5-libs
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
@@ -44,7 +44,7 @@ endef
 define Package/nfs-kernel-server-utils
   $(call Package/nfs-kernel-server/Default)
   TITLE:=NFS server utils
-  DEPENDS:=nfs-kernel-server
+  DEPENDS:=nfs-kernel-server +libnfsidmap
 endef
 
 define Package/nfs-kernel-server-utils/description
@@ -68,16 +68,16 @@ define Package/nfs-utils/description
 endef
 
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib -I$(STAGING_DIR)/usr/include $(LIBRPC_INCLUDE) -Drpc_uint=uint
-TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib $(LIBRPC)
+TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib $(LIBRPC) -lgssapi_krb5
 
 CONFIGURE_ARGS += \
-	--disable-gss \
 	--disable-nfsv4 \
 	--disable-nfsv41 \
 	--enable-static \
 	--enable-shared \
 	--disable-caps \
-	--disable-nfsdcld
+	--disable-nfsdcld \
+	--with-krb5=$(STAGING_DIR)/usr
 
 CONFIGURE_VARS += \
 	CONFIG_SQLITE3_TRUE="\#" \

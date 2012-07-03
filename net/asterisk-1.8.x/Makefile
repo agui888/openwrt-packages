@@ -95,7 +95,7 @@ endef
 define Package/asterisk18-cdr
 $(call Package/asterisk18/Default)
   TITLE:=CDR support
-  DEPENDS:= asterisk18 +libmysqlclient
+  DEPENDS:= asterisk18 +libmysqlclient +libsqlite3 +libsqlite2
 endef
 
 define Package/asterisk18-cdr/description

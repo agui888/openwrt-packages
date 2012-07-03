@@ -8,17 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openldap
-PKG_VERSION:=2.4.23
-PKG_RELEASE:=4
+PKG_VERSION:=2.4.31
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/ \
 	ftp://sunsite.cnlab-switch.ch/mirror/OpenLDAP/openldap-release/ \
 	ftp://ftp.nl.uu.net/pub/unix/db/openldap/openldap-release/ \
 	ftp://ftp.plig.org/pub/OpenLDAP/openldap-release/
-PKG_MD5SUM:=90150b8c0d0192e10b30157e68844ddf
+#PKG_MD5SUM:=90150b8c0d0192e10b30157e68844ddf
 
 PKG_FIXUP:=autoreconf
+
+PKG_BUILD_DEPENDS:=libopenssl libsasl2 libdb47
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -37,7 +39,7 @@ define Package/libopenldap
   $(call Package/openldap/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libopenssl +libsasl2
+  DEPENDS:=+libopenssl +libsasl2 +libpthread
   TITLE+= (libraries)
 endef
 
@@ -82,6 +84,7 @@ define Package/openldap-server/conffiles
 endef
 
 TARGET_CFLAGS += $(FPIC)
+TARGET_LDFLAGS += -lpthread
 
 CONFIGURE_ARGS += \
 	--enable-shared \
@@ -96,14 +99,16 @@ CONFIGURE_ARGS += \
 	--with-threads \
 	--with-tls \
 	--with-yielding_select="yes" \
-	--without-cyrus-sasl \
 	--without-threads \
 	--without-tls \
 	--enable-null \
 	--disable-bdb \
 	--disable-hdb \
+	--enable-mdb \
 	--disable-monitor \
 	--disable-relay
+
+CONFIGURE_VARS += BDB_LIB_STATIC=$(STAGING_DIR)/usr/lib/libdb.a
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -137,12 +142,16 @@ define Package/openldap-server/install
 	$(INSTALL_DIR) $(1)/etc/openldap/schema
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/schema/* $(1)/etc/openldap/schema/
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/slapd.conf $(1)/etc/openldap/
+	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/DB_CONFIG.example $(1)/etc/openldap/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	# XXX: OpenLDAP installs slapd into libexecdir, not sbindir:
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/slapd $(1)/usr/sbin/
-	# XXX: switch default backend to ldif, since bdb is disabled
-	$(SED) 's|^\(database\)\([ \t]\+\)bdb|\1\2ldif|g' \
-	    -e 's|^\(index\)|#\1|g' \
+	( cd $(1)/usr/sbin; \
+		find $(PKG_INSTALL_DIR)/usr/sbin -type l -name "slap*" | \
+		xargs -n 1 basename | \
+		xargs -I {} $(LN) slapd {} )
+	# XXX: switch default backend to hdb
+	$(SED) 's|^\(database\)\([ \t]\+\)bdb|\1\2hdb|g' \
 	    $(1)/etc/openldap/slapd.conf
 endef
 

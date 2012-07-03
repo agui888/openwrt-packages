@@ -21,8 +21,16 @@ define Package/$(PKG_NAME)
   MAINTAINER:=Luka Perkov <openwrt@lukaperkov.net>
 endef
 
-define Package/$(PKG_NAME)/description
-  Manages Mulitple Devices (sofware raid)
+define Package/mdadm/description
+ A tool for managing Linux Software RAID arrays.
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CC="$(TARGET_CC)" \
+		CFLAGS="$(TARGET_CFLAGS) -DHAVE_STDINT_H" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
+		mdadm mdassemble
 endef
 
 define Package/$(PKG_NAME)/install
