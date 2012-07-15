@@ -80,7 +80,7 @@ define Package/openldap-server/description
 endef
 
 define Package/openldap-server/conffiles
-/etc/openldap/slapd.conf
+/etc/openldap/slapd.conf.template
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -92,23 +92,20 @@ CONFIGURE_ARGS += \
 	--disable-debug \
 	--enable-dynamic \
 	--enable-syslog \
-	--disable-local \
+	--enable-local \
 	--disable-slurpd \
 	--with-cyrus-sasl \
+	--enable-spasswd \
 	--without-fetch \
-	--with-threads \
-	--with-tls \
 	--with-yielding_select="yes" \
 	--without-threads \
 	--without-tls \
 	--enable-null \
 	--disable-bdb \
 	--disable-hdb \
-	--enable-mdb \
+	--disable-mdb \
 	--disable-monitor \
 	--disable-relay
-
-CONFIGURE_VARS += BDB_LIB_STATIC=$(STAGING_DIR)/usr/lib/libdb.a
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -141,8 +138,7 @@ define Package/openldap-server/install
 	$(INSTALL_BIN) ./files/ldap.init $(1)/etc/init.d/ldap
 	$(INSTALL_DIR) $(1)/etc/openldap/schema
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/schema/* $(1)/etc/openldap/schema/
-	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/slapd.conf $(1)/etc/openldap/
-	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/DB_CONFIG.example $(1)/etc/openldap/
+	$(INSTALL_CONF) ./files/slapd.conf.template  $(1)/etc/openldap/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	# XXX: OpenLDAP installs slapd into libexecdir, not sbindir:
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/slapd $(1)/usr/sbin/
@@ -150,9 +146,6 @@ define Package/openldap-server/install
 		find $(PKG_INSTALL_DIR)/usr/sbin -type l -name "slap*" | \
 		xargs -n 1 basename | \
 		xargs -I {} $(LN) slapd {} )
-	# XXX: switch default backend to hdb
-	$(SED) 's|^\(database\)\([ \t]\+\)bdb|\1\2hdb|g' \
-	    $(1)/etc/openldap/slapd.conf
 endef
 
 $(eval $(call BuildPackage,libopenldap))

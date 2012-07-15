@@ -1,9 +1,9 @@
 diff -u --recursive krb5-1.8-vanilla/src/include/osconf.hin krb5-1.8/src/include/osconf.hin
---- krb5-1.8-vanilla/src/include/osconf.hin	2010-04-01 16:28:29.408661301 -0500
-+++ krb5-1.8/src/include/osconf.hin	2010-04-01 16:30:52.235467788 -0500
-@@ -61,14 +61,14 @@
- #define DEFAULT_LNAME_FILENAME  "@PREFIX/lib/krb5.aname"
- #endif /* _WINDOWS  */
+--- a/src/include/osconf.hin	2010-04-01 16:28:29.408661301 -0500
++++ b/src/include/osconf.hin	2010-04-01 16:30:52.235467788 -0500
+@@ -60,14 +60,14 @@
+ #define DEFAULT_PLUGIN_BASE_DIR "@LIBDIR/krb5/plugins"
+ #define PLUGIN_EXT              "@DYNOBJEXT"
  
 -#define DEFAULT_KDB_FILE        "@LOCALSTATEDIR/krb5kdc/principal"
 -#define DEFAULT_KEYFILE_STUB    "@LOCALSTATEDIR/krb5kdc/.k5."
@@ -21,7 +21,7 @@ diff -u --recursive krb5-1.8-vanilla/src/include/osconf.hin krb5-1.8/src/include
  #define KDC_PROFILE_ENV         "KRB5_KDC_PROFILE"
  
  #if TARGET_OS_MAC
-@@ -97,8 +97,8 @@
+@@ -95,8 +95,8 @@
  /*
   * Defaults for the KADM5 admin system.
   */
@@ -32,7 +32,7 @@ diff -u --recursive krb5-1.8-vanilla/src/include/osconf.hin krb5-1.8/src/include
  #define DEFAULT_KADM5_PORT      749 /* assigned by IANA */
  
  #define KRB5_DEFAULT_SUPPORTED_ENCTYPES                 \
-@@ -123,13 +123,13 @@
+@@ -118,12 +118,12 @@
   * krb5 slave support follows
   */
  
@@ -41,7 +41,6 @@ diff -u --recursive krb5-1.8-vanilla/src/include/osconf.hin krb5-1.8/src/include
 +#define KPROP_DEFAULT_FILE "/etc/krb5kdc/slave_datatrans"
 +#define KPROPD_DEFAULT_FILE "/etc/krb5kdc/from_master"
  #define KPROPD_DEFAULT_KDB5_UTIL "@SBINDIR/kdb5_util"
- #define KPROPD_DEFAULT_KDB5_EDIT "@SBINDIR/kdb5_edit"
  #define KPROPD_DEFAULT_KPROP "@SBINDIR/kprop"
  #define KPROPD_DEFAULT_KRB_DB DEFAULT_KDB_FILE
 -#define KPROPD_ACL_FILE "@LOCALSTATEDIR/krb5kdc/kpropd.acl"

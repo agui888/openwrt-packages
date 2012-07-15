@@ -1,21 +1,27 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2009-2011 OpenWrt.org
 
-START=61
+START=51
 
-SERVICE_USE_PID=1
-DATADIR=/etc/openldap/data
 PIDFILE=/var/run/slapd.pid
+CONFFILE=/var/etc/slapd.conf
+DATADIR=/overlay/etc/openldap/data
+SUFFIX=.ldif
 
 start() {
-	mkdir -m 0755 -p $DATADIR
-	service_start /usr/sbin/slapd
+	for file in "${DATADIR}/*${SUFFIX}"; do
+		root=$file
+	done
+
+	[ -f $root ] && {
+		mkdir -p /var/etc
+		mkdir -p /var/run
+		basedn=`basename $root $SUFFIX`
+		sed -e "s#|BASEDN|#$basedn#g" -e "s#|DATADIR|#$DATADIR#g" /etc/openldap/slapd.conf.template > $CONFFILE
+		/usr/sbin/slapd -h "ldapi:/// ldap://" -f $CONFFILE
+	}
 }
 
 stop() {
-	service_stop /usr/sbin/slapd
-}
-
-reload() {
-	service_reload /usr/sbin/slapd
+	[ -f $PIDFILE ] && kill $(cat $PIDFILE)
 }

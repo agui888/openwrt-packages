@@ -1,12 +1,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=krb5
-PKG_VERSION:=1.8
+PKG_VERSION_MAJOR=1.10
+PKG_VERSION_MINOR=.2
+PKG_VERSION:=$(PKG_VERSION_MAJOR)$(PKG_VERSION_MINOR)
 PKG_RELEASE:=2
 
 PKG_SOURCE:=krb5-$(PKG_VERSION)-signed.tar
-PKG_SOURCE_URL:=http://web.mit.edu/kerberos/dist/krb5/$(PKG_VERSION)/
-PKG_MD5SUM:=74257d68373a8df8b9391fc093d594be
+PKG_SOURCE_URL:=http://web.mit.edu/kerberos/dist/krb5/$(PKG_VERSION_MAJOR)/
+#PKG_MD5SUM:=74257d68373a8df8b9391fc093d594be
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=+libopenldap
@@ -62,11 +64,8 @@ endef
 define Build/Prepare
 	# Krb5 tarball contains signature and a second tarball
 	# containing source code.
-	tar xf "$(DL_DIR)/$(PKG_SOURCE)" -C "$(BUILD_DIR)"
-	tar xzf "$(BUILD_DIR)/krb5-$(PKG_VERSION).tar.gz" -C "$(BUILD_DIR)"
-	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/001-krb5kdc-dir-to-etc.patch"
-	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/002-MITKRB5-SA-2011-002.patch"
-	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/100-kadmin-use-dns.patch"
+	tar -xOf "$(DL_DIR)/$(PKG_SOURCE)" krb5-$(PKG_VERSION).tar.gz | tar -xz  -C "$(BUILD_DIR)"
+	$(call Build/Patch/Default)
 endef
 
 CONFIGURE_PATH = ./src
@@ -82,15 +81,11 @@ CONFIGURE_VARS += \
 
 CONFIGURE_ARGS += \
 	--enable-thread-support \
-	--without-krb4 \
 	--without-tcl \
 	--with-ldap \
 	--with-size-optimizations \
-	--without-hdb \
-	--without-db2 \
-	--without-pam \
 	--enable-dns-for-realm \
-	--disable-ipv6
+	--with-system-verto=no
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
@@ -117,7 +112,6 @@ define Package/krb5-libs/install
 	$(INSTALL_DIR) $(1)/usr/lib/krb5/plugins/kdb
 	$(INSTALL_DIR) $(1)/usr/lib/krb5/plugins/libkrb5
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/krb5/plugins/kdb/db2.so $(1)/usr/lib/krb5/plugins/kdb
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/krb5/plugins/kdb/kldap.so $(1)/usr/lib/krb5/plugins/kdb
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib
 endef
 
@@ -154,6 +148,8 @@ endef
 define Package/krb5-ldap/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kdb5_ldap_util $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/lib/krb5/plugins/kdb
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/krb5/plugins/kdb/kldap.so $(1)/usr/lib/krb5/plugins/kdb
 	$(INSTALL_DIR) $(1)/etc/openldap/schema
 	$(CP) $(PKG_BUILD_DIR)/src/plugins/kdb/ldap/libkdb_ldap/kerberos.schema $(1)/etc/openldap/schema
 endef

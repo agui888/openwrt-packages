@@ -29,14 +29,22 @@ define Package/libsasl2
   CATEGORY:=Libraries
   TITLE:=A general purpose authentication library
   URL:=http://asg.web.cmu.edu/sasl/
+  DEPENDS:=+krb5-libs
 endef
 
-TARGET_CFLAGS += $(FPIC)
+define Package/sasl2
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=A general purpose authenticator
+  URL:=http://asg.web.cmu.edu/sasl/
+  DEPENDS:=+libsasl2
+endef
+
+TARGET_CFLAGS += $(FPIC) -I$(STAGING_DIR)/usr/include/krb5
 CONFIGURE_ARGS += \
 	--enable-shared \
 	--enable-static \
 	--disable-sample \
-	--enable-staticdlopen \
 	--disable-java \
 	--disable-alwaystrue \
 	--disable-checkapop \
@@ -47,8 +55,9 @@ CONFIGURE_ARGS += \
 	--disable-srp \
 	--disable-srp-setpass \
 	--disable-krb4 \
-	--disable-gssapi \
-	--disable-gss_mutexes \
+	--enable-gssapi \
+	--enable-gss_mutexes \
+	--with-gss_impl=mit \
 	--enable-plain \
 	--enable-anon \
 	--disable-login \
@@ -59,7 +68,7 @@ CONFIGURE_ARGS += \
 	--without-gdbm \
 	--with-devrandom="/dev/urandom" \
 	--without-pam \
-	--without-saslauthd \
+	--with-saslauthd=/var/run/saslauthd \
 	--without-authdaemond \
 	--without-pwcheck \
 	--with-ipctype=unix \
@@ -100,9 +109,17 @@ endef
 
 define Package/libsasl2/install
 	$(INSTALL_DIR) $(1)/usr/lib/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsasl2.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsasl2.so* $(1)/usr/lib/
 	$(INSTALL_DIR) $(1)/usr/lib/sasl2
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sasl2/lib*.so.* $(1)/usr/lib/sasl2/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sasl2/lib*.so* $(1)/usr/lib/sasl2/
+endef
+
+define Package/sasl2/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/saslauthd $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/saslauthd.init $(1)/etc/init.d/saslauthd
 endef
 
 $(eval $(call BuildPackage,libsasl2))
+$(eval $(call BuildPackage,sasl2))

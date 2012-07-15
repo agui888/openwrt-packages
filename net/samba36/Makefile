@@ -139,12 +139,13 @@ ifeq ($(BUILD_VARIANT),samba36-server-ads)
 		-DDFS_SUPPORT \
 		-DNETLOGON_SUPPORT \
 		-DSAMR_SUPPORT \
-		-DLSA_SUPPORT
+		-DLSA_SUPPORT \
+		-DVERBOSE_ERROR
 
 	TARGET_LDFLAGS += \
 		-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -lkrb5 \
 		-L$(STAGING_DIR)/usr/lib/libiconv/lib \
-		-lkrb5 -lcom_err -ldl -ltirpc
+		-lkrb5 -lcom_err -ldl -ltirpc -lgssapi_krb5
 
 	CONFIGURE_VARS += \
 		ac_cv_lib_ext_krb5_krb5_mk_req_extended=yes \
