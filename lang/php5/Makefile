@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
-PKG_VERSION:=5.3.10
-PKG_RELEASE:=4
+PKG_VERSION:=5.4.5
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
-PKG_MD5SUM:=816259e5ca7d0a7e943e56a3bb32b17f
+PKG_MD5SUM:=ffcc7f4dcf2b79d667fe0c110e6cb724
 
 PKG_FIXUP:=libtool no-autoreconf
 PKG_BUILD_PARALLEL:=1
@@ -133,7 +133,6 @@ CONFIGURE_ARGS+= \
 	\
 	--with-config-file-path=/etc \
 	--with-config-file-scan-dir=/etc/php5 \
-	--enable-magic-quotes \
 	--disable-short-tags \
 	\
 	--with-zlib="$(STAGING_DIR)/usr" \
@@ -215,7 +214,7 @@ endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-gd),)
   CONFIGURE_ARGS+= \
-	--with-gd=shared,"$(STAGING_DIR)/usr" \
+	--with-gd=shared \
 	--without-freetype-dir \
 	--with-jpeg-dir="$(STAGING_DIR)/usr" \
 	--with-png-dir="$(STAGING_DIR)/usr" \
@@ -455,7 +454,6 @@ else
 endif
 
 CONFIGURE_VARS+= \
-	LIBS="$(CONFIGURE_LIBS)" \
 	ac_cv_c_bigendian_php=$(if $(CONFIG_BIG_ENDIAN),yes,no) \
 	php_cv_cc_rpath="no" \
 	iconv_impl_name="gnu_libiconv" \
@@ -501,6 +499,11 @@ define Package/php5-fastcgi/install
 
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/php5-fastcgi.init $(1)/etc/init.d/php5-fastcgi
+endef
+
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	( cd $(PKG_BUILD_DIR); touch configure.in; ./buildconf --force )
 endef
 
 define Build/InstallDev
@@ -550,7 +553,7 @@ $(eval $(call BuildModule,dom,DOM,+@PHP5_LIBXML +PACKAGE_php5-mod-dom:libxml2))
 $(eval $(call BuildModule,exif,EXIF))
 $(eval $(call BuildModule,ftp,FTP,+PACKAGE_php5-mod-ftp:libopenssl))
 $(eval $(call BuildModule,gettext,Gettext,+PACKAGE_php5-mod-gettext:libintl-full))
-$(eval $(call BuildModule,gd,GD graphics,+PACKAGE_php5-mod-gd:libgd))
+$(eval $(call BuildModule,gd,GD graphics,+PACKAGE_php5-mod-gd:libjpeg +PACKAGE_php5-mod-gd:libpng))
 $(eval $(call BuildModule,gmp,GMP,+PACKAGE_php5-mod-gmp:libgmp))
 $(eval $(call BuildModule,hash,Hash))
 $(eval $(call BuildModule,http,HTTP,+PACKAGE_php5-mod-http:libcurl +PACKAGE_php5-mod-http:libevent2 +PACKAGE_php5-mod-http:librt))

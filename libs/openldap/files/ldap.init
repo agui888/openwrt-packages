@@ -5,8 +5,10 @@ START=51
 
 PIDFILE=/var/run/slapd.pid
 CONFFILE=/var/etc/slapd.conf
+CLNTCONF=/var/etc/ldap.conf
 DATADIR=/overlay/etc/openldap/data
 SUFFIX=.ldif
+NSSWITCH=/var/etc/nsswitch.conf
 
 start() {
 	for file in "${DATADIR}/*${SUFFIX}"; do
@@ -18,10 +20,18 @@ start() {
 		mkdir -p /var/run
 		basedn=`basename $root $SUFFIX`
 		sed -e "s#|BASEDN|#$basedn#g" -e "s#|DATADIR|#$DATADIR#g" /etc/openldap/slapd.conf.template > $CONFFILE
+		chmod 600 $CONFFILE
 		/usr/sbin/slapd -h "ldapi:/// ldap://" -f $CONFFILE
+
+		echo -e "URI\tldapi:///" >$CLNTCONF
+		chmod 644 $CLNTCONF
+		sed -i -e "s/passwd:files$/passwd:files ldap/g" -e "s/group:files$/group:files ldap/g" $NSSWITCH
 	}
 }
 
 stop() {
-	[ -f $PIDFILE ] && kill $(cat $PIDFILE)
+	[ -f $PIDFILE ] && {
+		sed -i -e "s/passwd:files ldap$/passwd:files/g" -e "s/group:files ldap$/group:files/g" $NSSWITCH
+		kill $(cat $PIDFILE)
+	}
 }

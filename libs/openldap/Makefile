@@ -81,6 +81,7 @@ endef
 
 define Package/openldap-server/conffiles
 /etc/openldap/slapd.conf.template
+/etc/openldap/data
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -105,13 +106,14 @@ CONFIGURE_ARGS += \
 	--disable-hdb \
 	--disable-mdb \
 	--disable-monitor \
-	--disable-relay
+	--disable-relay \
+	--enable-overlays \
+	--enable-syncprov
+
+MAKE_VARS += HOSTCC="$(HOSTCC)" DESTDIR="$(PKG_INSTALL_DIR)"
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		HOSTCC="$(HOSTCC)" \
-		depend all install
+	$(call Build/Compile/Default,depend all install)
 endef
 
 define Build/InstallDev
@@ -123,7 +125,7 @@ endef
 
 define Package/libopenldap/install
 	$(INSTALL_DIR) $(1)/etc/openldap
-	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/ldap.conf $(1)/etc/openldap/
+	$(LN) /var/etc/ldap.conf $(1)/etc/openldap/ldap.conf
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{lber,ldap}*.so.* $(1)/usr/lib/
 endef

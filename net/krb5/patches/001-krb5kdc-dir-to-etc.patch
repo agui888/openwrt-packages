@@ -17,7 +17,7 @@ diff -u --recursive krb5-1.8-vanilla/src/include/osconf.hin krb5-1.8/src/include
  
  /* Location of KDC profile */
 -#define DEFAULT_KDC_PROFILE     "@LOCALSTATEDIR/krb5kdc/kdc.conf"
-+#define DEFAULT_KDC_PROFILE     "/etc/krb5kdc/kdc.conf"
++#define DEFAULT_KDC_PROFILE     "/var/etc/krb5.conf"
  #define KDC_PROFILE_ENV         "KRB5_KDC_PROFILE"
  
  #if TARGET_OS_MAC

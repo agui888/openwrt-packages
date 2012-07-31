@@ -139,8 +139,7 @@ ifeq ($(BUILD_VARIANT),samba36-server-ads)
 		-DDFS_SUPPORT \
 		-DNETLOGON_SUPPORT \
 		-DSAMR_SUPPORT \
-		-DLSA_SUPPORT \
-		-DVERBOSE_ERROR
+		-DLSA_SUPPORT
 
 	TARGET_LDFLAGS += \
 		-Wl,-rpath-link=$(STAGING_DIR)/usr/lib -lkrb5 \
@@ -192,13 +191,14 @@ endef
 
 define Package/samba36-server-ads/install
 	$(call Package/samba36-server/install,$(1))	
-	mkdir -p $(1)/etc/openldap/schema
+	$(INSTALL_DIR) $(1)/etc/openldap/schema
 	$(CP) $(PKG_BUILD_DIR)/examples/LDAP/samba.schema $(1)/etc/openldap/schema
+	$(INSTALL_DIR) $(1)/etc/samba
+	ln -sf /var/etc/secrets.tdb $(1)/etc/samba/secrets.tdb
+	ln -sf /var/etc/schannel_store.tdb $(1)/etc/samba/schannel_store.tdb
 endef
 
 define Package/samba36-server-ads/conffiles
-/etc/samba/samba.keytab
-/etc/samba/secrets.tdb
 /etc/samba/smb.conf.template
 endef
 

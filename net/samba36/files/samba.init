@@ -40,11 +40,18 @@ smb_header() {
 	    -e "s#|CHARSET|#$charset#g" \
 	    /etc/samba/smb.conf.template > /var/etc/smb.conf
 
-	[ -f /etc/samba/samba.keytab ] && {
-		REALM=`klist -k /etc/samba/samba.keytab | awk 'FS="@" { if ($2 != "") { print $2; exit } }'`
-		echo -e "\tkerberos method = dedicated keytab" >> /var/etc/smb.conf
-		echo -e "\tdedicated keytab file = /etc/samba/samba.keytab" >> /var/etc/smb.conf
-		echo -e "\trealm = $REALM" >> /var/etc/smb.conf
+	[ -f /etc/krb5.keytab ] && {
+		REALM=`klist -k /etc/krb5.keytab | awk 'FS="@" { if ($2 != "") { print $2; exit } }'`
+		echo  >>/var/etc/smb.conf -e "\tkerberos method = system keytab"
+		echo  >>/var/etc/smb.conf -e "\trealm = $REALM"
+	}
+
+	[ -S /var/run/ldapi ] && {
+		echo  >>/var/etc/smb.conf -e "\tldap ssl = off"
+		echo  >>/var/etc/smb.conf -e "\tdomain logons = yes"
+		sed -i -e "s#passdb backend = \(.*\)#passdb backend = ldapsam:ldapi:///#g" \
+		       -e "s#security = \(.*\)#security = domain#g" \
+		       /var/etc/smb.conf
 	}
 
 	local homes
