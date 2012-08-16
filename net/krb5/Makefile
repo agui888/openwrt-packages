@@ -102,6 +102,9 @@ define Build/InstallDev
 endef
 
 define Package/krb5-libs/install
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/krb5conf $(1)/etc/init.d/krb5conf
+	ln -sf /var/etc/krb5.conf $(1)/etc/krb5.conf
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DIR) $(1)/usr/lib/krb5
 	$(INSTALL_DIR) $(1)/usr/lib/krb5/plugins

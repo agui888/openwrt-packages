@@ -1,0 +1,45 @@
+--- a/src/plugins/kdb/ldap/libkdb_ldap/ldap_krbcontainer.c	2012-07-14 22:34:37.941360877 +0200
++++ b/src/plugins/kdb/ldap/libkdb_ldap/ldap_krbcontainer.c	2012-07-14 22:35:07.977065839 +0200
+@@ -112,24 +112,10 @@
+         }
+     }
+ 
+-#ifndef HAVE_EDIRECTORY
+-/*
+- * In case eDirectory, we can fall back to security container if the kerberos container location
+- * is missing in the conf file. In openldap we will have to return an error.
+- */
+-    if (cparams->DN == NULL) {
+-        st = KRB5_KDB_SERVER_INTERNAL_ERR;
+-        krb5_set_error_message(context, st,
+-                               _("Kerberos container location not specified"));
+-        goto cleanup;
+-    }
+-#endif
+-
+-    if (cparams->DN != NULL) {
+         /* NOTE: krbmaxtktlife, krbmaxrenewableage ... present on Kerberos Container is
+          * not read
+          */
+-        LDAP_SEARCH_1(cparams->DN, LDAP_SCOPE_BASE, "(objectclass=krbContainer)", policyrefattribute, IGNORE_STATUS);
++        LDAP_SEARCH_1(cparams->DN, LDAP_SCOPE_SUBTREE, "(objectclass=krbContainer)", policyrefattribute, IGNORE_STATUS);
+         if (st != LDAP_SUCCESS && st != LDAP_NO_SUCH_OBJECT) {
+             st = set_ldap_error(context, st, OP_SEARCH);
+             goto cleanup;
+@@ -139,7 +125,6 @@
+             st = KRB5_KDB_NOENTRY;
+             goto cleanup;
+         }
+-    }
+ 
+ #ifdef HAVE_EDIRECTORY
+     /*
+@@ -172,6 +157,8 @@
+ #endif
+ 
+     if ((ent = ldap_first_entry(ld, result))) {
++        if (cparams->DN == NULL)
++            cparams->DN = ldap_get_dn(ld, ent);
+         if ((st=krb5_ldap_get_string(ld, ent, "krbticketpolicyreference",
+                                      &(cparams->policyreference), NULL)) != 0)
+             goto cleanup;
