@@ -26,7 +26,7 @@ define Package/amule
   CATEGORY:=Network
   TITLE:=A multi-platform eMule-like ed2k client
   URL:=http://www.amule.org/
-  DEPENDS:=+libpng +libpthread +libncurses +libreadline +libwxbase +libcryptoxx
+  DEPENDS:=+libpng +libpthread +libncurses +libreadline +libwxbase +libcryptoxx +objdump
 endef
 
 CONFIGURE_ARGS+= \

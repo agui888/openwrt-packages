@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=faifa
-PKG_VERSION:=2012-07-23
+PKG_VERSION:=2012-08-11
 PKG_RELEASE:=$(PKG_SOURCE_VERSION)
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://github.com/ffainelli/faifa.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=2b57e69e17a55aa3c539c3c4a7d8f586bb59536a
+PKG_SOURCE_VERSION:=5705a7403b34c24e4852edf1909274c88fb75398
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 
 PKG_INSTALL:=1
@@ -31,7 +31,7 @@ define Package/libfaifa
   TITLE+= (library)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libopenssl +libpcap +libpthread
+  DEPENDS:=+libpcap +libpthread
 endef
 
 define Package/libfaifa/description
@@ -42,7 +42,7 @@ define Package/faifa
   $(call Package/faifa/Default)
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libpthread +libopenssl +libpcap +libfaifa
+  DEPENDS:=+libpthread +libpcap +libfaifa
   TITLE+= (command line)
 endef
 
@@ -51,6 +51,17 @@ define Package/faifa/description
   Intellon INT5000 and INT6000 series chips (6000 and 6300 chips). It supports all
   Intellon-specific management and control frames as well as standard management
   frames.
+endef
+
+define Package/hpavcfg
+  $(call Package/faifa/Default)
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=HomePlug AV lightweight configurator
+endef
+
+define Package/hpavcfg/description
+   Lightweight configuration tool, only capable of setting a local device key (NMK)
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -75,5 +86,11 @@ define Package/libfaifa/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfaifa.so* $(1)/usr/lib
 endef
 
+define Package/hpavcfg/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/hpav_cfg $(1)/usr/bin
+endef
+
 $(eval $(call BuildPackage,faifa))
 $(eval $(call BuildPackage,libfaifa))
+$(eval $(call BuildPackage,hpavcfg))

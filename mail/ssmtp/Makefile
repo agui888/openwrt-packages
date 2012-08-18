@@ -35,11 +35,6 @@ define Package/ssmtp/description
  configuration.
 endef
 
-define Package/ssmtp/conffiles
-/etc/ssmtp/ssmtp.conf
-/etc/ssmtp/revaliases
-endef
-
 CONFIGURE_VARS += \
 	LIBS="$(TARGET_LDFLAGS) -lcrypto -lssl"
 
@@ -48,8 +43,8 @@ CONFIGURE_ARGS += \
 
 define Package/ssmtp/install
 	$(INSTALL_DIR) $(1)/etc/ssmtp
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/ssmtp.conf $(1)/etc/ssmtp/
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/revaliases $(1)/etc/ssmtp/
+	$(LN) /var/etc/ssmtp.conf $(1)/etc/ssmtp/ssmpt.conf
+	$(LN) /var/etc/revaliases $(1)/etc/ssmtp/revaliases
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ssmtp $(1)/usr/sbin/
 endef

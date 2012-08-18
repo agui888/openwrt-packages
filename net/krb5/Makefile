@@ -141,6 +141,10 @@ define Package/krb5-server/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/krb5kdc $(1)/usr/sbin
 endef
 
+define Package/openldap-server/conffiles
+/etc/krb5.keytab
+endef
+
 define Package/krb5-ldap/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kdb5_ldap_util $(1)/usr/sbin

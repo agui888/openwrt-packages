@@ -141,6 +141,7 @@ define Package/openldap-server/install
 	$(INSTALL_DIR) $(1)/etc/openldap/schema
 	$(INSTALL_CONF) $(PKG_INSTALL_DIR)/etc/openldap/schema/* $(1)/etc/openldap/schema/
 	$(INSTALL_CONF) ./files/slapd.conf.template  $(1)/etc/openldap/
+	$(INSTALL_DIR) $(1)/etc/openldap/data
 	$(INSTALL_DIR) $(1)/usr/sbin
 	# XXX: OpenLDAP installs slapd into libexecdir, not sbindir:
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/slapd $(1)/usr/sbin/

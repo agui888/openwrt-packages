@@ -42,7 +42,8 @@ smb_header() {
 
 	[ -f /etc/krb5.keytab ] && {
 		REALM=`klist -k /etc/krb5.keytab | awk 'FS="@" { if ($2 != "") { print $2; exit } }'`
-		echo  >>/var/etc/smb.conf -e "\tkerberos method = system keytab"
+		echo  >>/var/etc/smb.conf -e "\tkerberos method = dedicated keytab"
+		echo  >>/var/etc/smb.conf -e "\tdedicated keytab file = /etc/krb5.keytab"
 		echo  >>/var/etc/smb.conf -e "\trealm = $REALM"
 		sed -i -e "s#workgroup = \(.*\)#workgroup = $REALM#g" /var/etc/smb.conf
 	}

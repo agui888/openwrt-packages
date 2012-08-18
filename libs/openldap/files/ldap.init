@@ -9,24 +9,39 @@ CLNTCONF=/var/etc/ldap.conf
 DATADIR=/overlay/etc/openldap/data
 SUFFIX=.ldif
 NSSWITCH=/var/etc/nsswitch.conf
+BIN=/usr/sbin/slapd
 
-start() {
-	for file in "${DATADIR}/*${SUFFIX}"; do
-		root=$file
-	done
+add_line() {
+	echo >>$CONFFILE -e $1
+}
 
-	[ -f $root ] && {
+start_server() {
+        config_get enabled  $1 enabled   "0"
+	config_get serverid $1 serverid "1"
+	config_get basedn   $1 basedn   "dc=local,dc=net"
+
+	[ "$enabled" -eq "1" ] && {
 		mkdir -p /var/etc
 		mkdir -p /var/run
-		basedn=`basename $root $SUFFIX`
-		sed -e "s#|BASEDN|#$basedn#g" -e "s#|DATADIR|#$DATADIR#g" /etc/openldap/slapd.conf.template > $CONFFILE
+		sed -e "s#|BASEDN|#$basedn#g" \
+		    -e "s#|DATADIR|#$DATADIR#g" \
+		    -e "s#|SERVERID|#$serverid#g" \
+		    /etc/openldap/slapd.conf.template > $CONFFILE
 		chmod 600 $CONFFILE
-		/usr/sbin/slapd -h "ldapi:/// ldap://" -f $CONFFILE
 
-		echo -e "URI\tldapi:///" >$CLNTCONF
-		chmod 644 $CLNTCONF
-		sed -i -e "s/passwd:files$/passwd:files ldap/g" -e "s/group:files$/group:files ldap/g" $NSSWITCH
+		$BIN -h "ldapi:/// ldap://" -f $CONFFILE
+
+		[ -e /var/run/ldapi ] && {
+			echo -e "URI\tldapi:///" >$CLNTCONF
+			chmod 644 $CLNTCONF
+			sed -i -e "s/passwd:files$/passwd:files ldap/g" -e "s/group:files$/group:files ldap/g" $NSSWITCH
+		}
 	}
+}
+
+start() {
+	config_load ldap
+	config_foreach  start_server server
 }
 
 stop() {

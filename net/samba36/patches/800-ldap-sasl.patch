@@ -21,10 +21,10 @@
  
  		/* get the default dn and password only if they are not set already */
  		if (!fetch_ldap_pw(&bind_dn, &bind_secret)) {
--			DEBUG(1, ("ldap_connect_system: Failed to retrieve password from secrets.tdb\n"));
+-			DEBUG(0, ("ldap_connect_system: Failed to retrieve password from secrets.tdb\n"));
 -			rc = LDAP_INVALID_CREDENTIALS;
 -			goto done;
-+			DEBUG(0, ("ldap_connect_system: Failed to retrieve password from secrets.tdb. Switching to SASL\n"));
++			DEBUG(1, ("ldap_connect_system: Failed to retrieve password from secrets.tdb. Switching to SASL\n"));
 +			smbldap_set_creds(ldap_state, true, NULL, NULL);
 +		} else {
 +			smbldap_set_creds(ldap_state, false, bind_dn, bind_secret);
