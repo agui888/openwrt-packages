@@ -29,6 +29,8 @@ start_server() {
 		    /etc/openldap/slapd.conf.template > $CONFFILE
 		chmod 600 $CONFFILE
 
+		[ ! -f $DATADIR ] && mkdir -p $DATADIR
+
 		$BIN -h "ldapi:/// ldap://" -f $CONFFILE
 
 		[ -e /var/run/ldapi ] && {
