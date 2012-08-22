@@ -27,7 +27,7 @@ define Package/nfs-kernel-server/Default
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Filesystem
-  DEPENDS:=+libwrap +libblkid +libuuid $(LIBRPC_DEPENDS)
+  DEPENDS:=+libwrap +libblkid +libuuid $(LIBRPC_DEPENDS) +krb5-libs
   URL:=http://nfs.sourceforge.net/
 endef
 
@@ -68,7 +68,7 @@ define Package/nfs-utils/description
 endef
 
 TARGET_CFLAGS += -I$(PKG_BUILD_DIR)/lib -I$(STAGING_DIR)/usr/include/libevent \
-		 -I$(STAGING_DIR)/usr/include/ -Drpc_uint=uint
+		 -I$(STAGING_DIR)/usr/include/ -I$(STAGING_DIR)/usr/include/krb5/ -Drpc_uint=uint
 TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib $(LIBRPC) \
 		  -L$(STAGING_DIR)/usr/lib/libevent -lgssapi_krb5
 

@@ -1,0 +1,11 @@
+--- cyrus-sasl-2.1.23/cmulocal/sasl2.m4.orig	2012-08-22 23:11:59.435757765 +0200
++++ cyrus-sasl-2.1.23/cmulocal/sasl2.m4	2012-08-22 23:16:38.939761022 +0200
+@@ -68,7 +68,7 @@
+   AC_CHECK_HEADER([gssapi.h],
+                   [AC_DEFINE(HAVE_GSSAPI_H,,
+                              [Define if you have the gssapi.h header file])],
+-                  [AC_CHECK_HEADER([gssapi/gssapi.h],,
++                  [AC_CHECK_HEADER([krb5/gssapi/gssapi.h],,
+                                    [AC_WARN([Disabling GSSAPI - no include files found]); gssapi=no])])
+ 
+   CPPFLAGS=$cmu_saved_CPPFLAGS
