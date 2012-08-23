@@ -1,0 +1,11 @@
+--- a/configure	2012-08-23 10:58:27.386738251 +0200
++++ b/configure	2012-08-23 10:59:03.617681697 +0200
+@@ -18842,7 +18842,7 @@
+ #define KRB5_VERSION $K5VERS
+ _ACEOF
+ 
+-      if test -f $dir/include/gssapi/gssapi_krb5.h -a \
++      if test -f $dir/include/krb5/gssapi/gssapi_krb5.h -a \
+                 \( -f $dir/lib/libgssapi_krb5.a -o \
+                    -f $dir/lib64/libgssapi_krb5.a -o \
+                    -f $dir/lib64/libgssapi_krb5.so -o \
