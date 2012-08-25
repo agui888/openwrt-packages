@@ -5,20 +5,10 @@ START=52
 PIDFILE_KDC=/var/run/krb5kdc.pid
 PIDFILE_ADM=/var/run/kadmind.pid
 
-create_dummy_stash() {
-	/usr/sbin/kdb5_ldap_util stashsrvpw -f /var/run/krb5dummystash n/a <<EOT >/dev/null 2>&1
-{FILE}/etc/krb5.conf
-{FILE}/etc/krb5.conf
-EOT
-}
-
-
 start() {
 	mkdir -p /var/tmp
 	mkdir -p /etc/krb5kdc
 
-	[ -e /usr/sbin/kdb5_ldap_util ] && create_dummy_stash
-	
 	/usr/sbin/krb5kdc -P $PIDFILE_KDC
 	/usr/sbin/kadmind -P $PIDFILE_ADM
 }
