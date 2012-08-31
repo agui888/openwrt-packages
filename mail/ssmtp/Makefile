@@ -43,7 +43,7 @@ CONFIGURE_ARGS += \
 
 define Package/ssmtp/install
 	$(INSTALL_DIR) $(1)/etc/ssmtp
-	$(LN) /var/etc/ssmtp.conf $(1)/etc/ssmtp/ssmpt.conf
+	$(LN) /var/etc/ssmtp.conf $(1)/etc/ssmtp/ssmtp.conf
 	$(LN) /var/etc/revaliases $(1)/etc/ssmtp/revaliases
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ssmtp $(1)/usr/sbin/

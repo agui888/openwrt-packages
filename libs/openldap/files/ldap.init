@@ -23,9 +23,20 @@ start_server() {
 	[ "$enabled" -eq "1" ] && {
 		mkdir -p /var/etc
 		mkdir -p /var/run
+
+		SASLREALM=`klist -k | awk 'FS="ldap/" { if ($2 != "") { split($2,a,"@"); print a[2]; exit } }'`
+		SASLHOST=`klist -k | awk 'FS="ldap/" { if ($2 != "") { split($2,a,"@"); print a[1]; exit } }'`
+
+		[ -z $SASLREALM ] || {
+			SASLREALM="sasl-realm\t$SASLREALM"
+			SASLHOST="sasl-host\t$SASLHOST"
+		}
+
 		sed -e "s#|BASEDN|#$basedn#g" \
 		    -e "s#|DATADIR|#$DATADIR#g" \
 		    -e "s#|SERVERID|#$serverid#g" \
+		    -e "s#|SASLHOST|#$SASLHOST#g" \
+		    -e "s#|SASLREALM|#$SASLREALM#g" \
 		    /etc/openldap/slapd.conf.template > $CONFFILE
 		chmod 600 $CONFFILE
 

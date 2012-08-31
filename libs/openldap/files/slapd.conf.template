@@ -11,7 +11,8 @@ argsfile	/var/run/slapd.args
 defaultsearchbase	"|BASEDN|"
 serverid	|SERVERID|
 
-sasl-host	localhost
+|SASLHOST|
+|SASLREALM|
 sasl-secprops	none
 
 database	ldif
