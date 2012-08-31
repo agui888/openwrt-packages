@@ -25,7 +25,7 @@ define Package/netatalk
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Filesystem
-  DEPENDS:=+libdb47 +libgcrypt +libopenssl $(LIBRPC_DEPENDS) +libacl
+  DEPENDS:=+libdb47 +libgcrypt +libopenssl $(LIBRPC_DEPENDS) +libacl +PACKAGE_libpam:libpam +PACKAGE_libavahi-client:libavahi-client
   TITLE:=netatalk
   URL:=http://netatalk.sourceforge.net
   MAINTAINER:=W. Michael Petullo <mike@flyn.org>
@@ -60,9 +60,20 @@ CONFIGURE_ARGS += \
 	--with-uams-path="/usr/lib/uams" \
 	--disable-admin-group \
 	--disable-srvloc \
-	--disable-zeroconf \
 	--without-shadow \
 	--without-ldap
+
+ifdef CONFIG_PACKAGE_avahi-daemon
+	CONFIGURE_ARGS += --enable-zeroconf
+else
+	CONFIGURE_ARGS += --disable-zeroconf
+endif
+
+ifdef CONFIG_PACKAGE_libpam
+	CONFIGUREARGS += --with-pam
+else
+	CONFIGUREARGS += --without-pam
+endif
 
 define Package/netatalk/install
 	$(INSTALL_DIR) $(1)/usr/bin
