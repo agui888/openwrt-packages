@@ -24,17 +24,22 @@ define Package/vsftpd
   TITLE:=A fast and secure FTP server
   URL:=http://vsftpd.beasts.org/
   MAINTAINER:=Cezary Jackiewicz <cezary@eko.one.pl>
+  DEPENDS=+PACKAGE_libpam:libpam
 endef
 
 define Package/vsftpd/conffiles
 /etc/vsftpd.conf
 endef
 
+ifdef CONFIG_PACKAGE_libpam
+  EXTRA_LDFLAGS += -lpam
+endif
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC="$(TARGET_CC)" \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
+		LDFLAGS="$(TARGET_LDFLAGS) $(EXTRA_LDFLAGS)" \
 		vsftpd
 endef
 
