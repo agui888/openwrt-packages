@@ -165,6 +165,7 @@ define Package/openssh-client/install
 	$(INSTALL_DIR) $(1)/etc/ssh
 	chmod 0700 $(1)/etc/ssh
 	$(CP) $(PKG_INSTALL_DIR)/etc/ssh/ssh_config $(1)/etc/ssh/
+
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ssh $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/scp $(1)/usr/bin/
@@ -185,6 +186,9 @@ define Package/openssh-server/install
 	$(INSTALL_DIR) $(1)/etc/ssh
 	chmod 0700 $(1)/etc/ssh
 	$(CP) $(PKG_INSTALL_DIR)/etc/ssh/sshd_config $(1)/etc/ssh/
+	$(SED) 's/#KerberosAuthentication no/KerberosAuthentication yes/g' $(1)/etc/ssh/sshd_config
+	$(SED) 's/#KerberosOrLocalPasswd yes/KerberosOrLocalPasswd yes/g' $(1)/etc/ssh/sshd_config
+	$(SED) 's/#KerberosTicketCleanup yes/KerberosTicketCleanup yes/g' $(1)/etc/ssh/sshd_config
 	
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/sshd.init $(1)/etc/init.d/sshd
