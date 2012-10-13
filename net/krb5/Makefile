@@ -94,6 +94,7 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib \
 		$(1)/usr
+	rm $(1)/usr/lib/libcom_err.so
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/krb5-config \
 		$(1)/usr/bin
@@ -112,6 +113,7 @@ define Package/krb5-libs/install
 	$(INSTALL_DIR) $(1)/usr/lib/krb5/plugins/libkrb5
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/krb5/plugins/kdb/db2.so $(1)/usr/lib/krb5/plugins/kdb
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib
+	rm $(1)/usr/lib/libcom_err.so
 endef
 
 define Package/krb5-client/install
