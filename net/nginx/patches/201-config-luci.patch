@@ -1,0 +1,23 @@
+--- a/conf/nginx.conf	2012-10-13 03:22:10.644249704 +0200
++++ b/conf/nginx.conf	2012-10-13 03:21:25.767832634 +0200
+@@ -41,10 +41,19 @@
+         #access_log  logs/host.access.log  main;
+ 
+         location / {
+-            root   html;
++            root   /www;
+             index  index.html index.htm;
+         }
+ 
++        location /cgi-bin/luci {
++            fastcgi_split_path_info ^(/cgi-bin/luci)(/.+)$;
++            fastcgi_pass  unix:/var/run/luafcgid.sock;
++            fastcgi_param PATH_INFO $fastcgi_path_info;
++            fastcgi_param SCRIPT_FILENAME /usr/lib/lua/luci/sgi/fcgi.lua;
++            include       fastcgi_params;
++            client_max_body_size 16M;
++        }
++
+         #error_page  404              /404.html;
+ 
+         # redirect server error pages to the static page /50x.html

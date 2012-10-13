@@ -85,6 +85,8 @@ define Build/Configure
 			--http-client-body-temp-path=/var/lib/nginx/body \
 			--http-proxy-temp-path=/var/lib/nginx/proxy \
 			--http-fastcgi-temp-path=/var/lib/nginx/fastcgi \
+			--http-uwsgi-temp-path=/var/lib/nginx/uwsgi \
+			--http-scgi-temp-path=/var/lib/nginx/scgi \
 			--with-cc="$(TARGET_CC)" \
 			--with-cc-opt="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS)" \
 			--with-ld-opt="$(TARGET_LDFLAGS)" \

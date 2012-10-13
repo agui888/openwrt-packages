@@ -43,7 +43,7 @@ define Package/libcurl
   $(call Package/curl/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libopenssl +zlib +USE_EGLIBC:librt
+  DEPENDS:=+libopenssl +zlib
   TITLE:=A client-side URL transfer library
 endef
 
@@ -85,7 +85,7 @@ CONFIGURE_VARS += \
 	CC="$(filter-out ccache,$(TARGET_CC))"
 
 define Build/Compile
-	$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		CC="$(TARGET_CC)" \
 		install
