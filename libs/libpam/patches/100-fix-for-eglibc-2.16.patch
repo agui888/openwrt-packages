@@ -1,0 +1,22 @@
+--- a/modules/pam_unix/pam_unix_acct.c	2012-07-04 12:37:44.881136025 -0700
++++ b/modules/pam_unix/pam_unix_acct.c	2012-07-04 12:38:00.601136785 -0700
+@@ -47,6 +47,7 @@
+ #include <time.h>		/* for time() */
+ #include <errno.h>
+ #include <sys/wait.h>
++#include <sys/resource.h>
+ 
+ #include <security/_pam_macros.h>
+ 
+ 
+--- a/modules/pam_unix/pam_unix_passwd.c
++++ b/modules/pam_unix/pam_unix_passwd.c
+@@ -46,6 +46,7 @@
+ #include <unistd.h>
+ #include <errno.h>
+ #include <sys/types.h>
++#include <sys/resource.h>
+ #include <pwd.h>
+ #include <syslog.h>
+ #include <shadow.h>
+
