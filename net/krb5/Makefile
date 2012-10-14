@@ -100,6 +100,7 @@ define Build/InstallDev
 		$(1)/usr/bin
 	$(SED) 's,^includedir=$$$${prefix}/include,includedir=$(STAGING_DIR)/usr/include/krb5,g' $(1)/usr/bin/krb5-config
 	$(SED) 's,^libdir=$$$${exec_prefix}/lib,libdir=$(STAGING_DIR)/usr/lib,g' $(1)/usr/bin/krb5-config
+	$(SED) 's,-lcom_err,-l:libcom_err.so.3,g' $(1)/usr/bin/krb5-config
 endef
 
 define Package/krb5-libs/install
