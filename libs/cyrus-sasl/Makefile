@@ -84,6 +84,17 @@ CONFIGURE_ARGS += \
 	--without-sfio \
 	--disable-sample
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	$(SED) 's!-lcom_err!-l:libcom_err.so.3!g' $(PKG_BUILD_DIR)/saslauthd/aclocal.m4
+	$(SED) 's!-lcom_err!-l:libcom_err.so.3!g' $(PKG_BUILD_DIR)/cmulocal/com_err_link.m4
+	$(SED) 's!-lcom_err!-l:libcom_err.so.3!g' $(PKG_BUILD_DIR)/cmulocal/com_err.m4
+	$(SED) 's!-lcom_err!-l:libcom_err.so.3!g' $(PKG_BUILD_DIR)/cmulocal/sasl2.m4
+	$(SED) 's!-lcom_err!-l:libcom_err.so.3!g' $(PKG_BUILD_DIR)/aclocal.m4
+	$(SED) 's!-lcom_err!-l:libcom_err.so.3!g' $(PKG_BUILD_DIR)/config/kerberos_v4.m4
+	$(SED) 's!-lcom_err!-l:libcom_err.so.3!g' $(PKG_BUILD_DIR)/cmulocal/afs.m4
+endef
+
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)/include \
 		CC="$(HOSTCC)" \
