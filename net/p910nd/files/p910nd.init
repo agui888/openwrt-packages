@@ -36,7 +36,7 @@ stop_service() {
 	config_get port "$section" port
 
 	PID_F=/var/run/p910${port}d.pid
-	[ -f $PID_F ] && kill $(cat $PID_F)
+	[ -f $PID_F ] && kill -9 $(cat $PID_F)
 }
 
 start() {
