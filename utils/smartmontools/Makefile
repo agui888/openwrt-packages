@@ -20,6 +20,7 @@ define Package/smartmontools/Default
   SECTION:=utils
   CATEGORY:=Utilities
   DEPENDS:=+libstdcpp
+#  DEPENDS:=$(CXX_DEPENDS)
   TITLE:=S.M.A.R.T Monitoring
   URL:=http://smartmontools.sourceforge.net/
 endef
