@@ -1,0 +1,21 @@
+--- a/configure.in	2012-12-16 12:25:11.798332635 +0100
++++ b/configure.in	2012-12-16 12:26:02.892141482 +0100
+@@ -326,18 +326,6 @@
+     AC_DEFINE(HAVE_DEV_URANDOM, 1, [Is /dev/urandom available?])
+ fi
+ 
+-nl added by PN 3/2/12 to detect cups
+-$as_echo "checking for cups"
+-if test -e /usr/include/cups/cups.h ; then
+-    AC_DEFINE(HAVE_CUPS, 1, [Is /usr/include/cups/cups.h available?])
+-	with_cups="yes"
+-	LIBS="-lcups  $LIBS"
+-else
+-	$as_echo "cups.h not found, you may want to install a cups development package"
+-	$as_echo "in order to autodetect network scanners in kodakaio."
+-	with_cups="no"
+-fi
+-
+ dnl ***********
+ dnl USB Support
+ dnl ***********

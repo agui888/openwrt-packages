@@ -2,12 +2,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=mdadm
-PKG_VERSION:=3.2.5
+PKG_VERSION:=3.2.6
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=@KERNEL/linux/utils/raid/mdadm
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_MD5SUM:=2fd33dedcdb06f0d1461f50ddabb7e4a
+#PKG_MD5SUM:=2fd33dedcdb06f0d1461f50ddabb7e4a
 
 PKG_BUILD_PARALLEL:=1
 
