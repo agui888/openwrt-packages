@@ -38,7 +38,7 @@ define Package/l2tpns/conffiles
 /etc/l2tpns/startup-config
 /etc/l2tpns/users
 endef
-	
+
 define Build/Compile
 	$(call Build/Compile/Default, \
 		LD="$(TARGET_CC)" \
