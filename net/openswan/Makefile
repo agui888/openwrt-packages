@@ -58,6 +58,7 @@ $(call Package/openswan/Default/description)
 endef
 
 TARGET_CPPFLAGS += -I$(LINUX_DIR)/include -D__EXPORTED_HEADERS__
+TARGET_CFLAGS += -Wno-cpp
 
 OPENSWAN_MAKEFLAGS:= \
 	-C $(PKG_BUILD_DIR) \
