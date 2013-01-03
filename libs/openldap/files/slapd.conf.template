@@ -51,7 +51,7 @@ access to attrs=userPassword
 	by anonymous auth
 
 # required by nss_ldap
-access to attrs=entry,uid,uidNumber,gidNumber,cn,homeDirectory,loginShell,gecos,description,objectClass
+access to attrs=entry,uid,uidNumber,gidNumber,cn,memberUid,homeDirectory,loginShell,gecos,description,objectClass
 	by dn="cn=Manager,ou=System Users,|BASEDN|" write
 	by self write
 	by * read

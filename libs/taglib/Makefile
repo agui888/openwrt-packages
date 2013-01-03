@@ -47,6 +47,12 @@ define Build/InstallDev
 	$(SED) \
 		's,^\(prefix\|exec_prefix\)=.*,\1=$(STAGING_DIR)/usr,g' \
 		$(2)/bin/taglib-config
+	$(SED) \
+		's,^\(libdir\)=.*,\1=$(STAGING_DIR)/usr/lib,g' \
+		$(2)/bin/taglib-config
+	$(SED) \
+		's,^\(includedir\)=.*,\1=$(STAGING_DIR)/usr/include,g' \
+		$(2)/bin/taglib-config
 
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) \
