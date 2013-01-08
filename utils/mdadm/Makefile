@@ -18,6 +18,7 @@ define Package/$(PKG_NAME)
   CATEGORY:=Utilities
   TITLE:=A tool for managing Soft RAID under Linux
   URL:=http://www.kernel.org/pub/linux/utils/raid/mdadm/
+  DEPENDS:=+@KERNEL_DIRECT_IO
 endef
 
 define Package/mdadm/description
