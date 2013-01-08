@@ -138,7 +138,7 @@ define Package/zoneinfo-simple/install
 		America/Chicago     America/New_York    America/Caracas  \
 		America/Sao_Paulo   Europe/London       Europe/Paris     \
 		Africa/Cairo        Europe/Moscow       Asia/Dubai       \
-		Asia/Karachi        Asia/Dhaka          Asia/Bankok      \
+		Asia/Karachi        Asia/Dhaka          Asia/Bangkok     \
 		Asia/Hong_Kong      Asia/Tokyo          Australia/Darwin \
 		Australia/Adelaide  Australia/Brisbane  Australia/Sydney \
 		Australia/Perth     Pacific/Noumea ; do \

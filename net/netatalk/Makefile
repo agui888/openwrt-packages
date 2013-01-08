@@ -70,9 +70,9 @@ else
 endif
 
 ifdef CONFIG_PACKAGE_libpam
-	CONFIGUREARGS += --with-pam
+	CONFIGURE_ARGS += --with-pam
 else
-	CONFIGUREARGS += --without-pam
+	CONFIGURE_ARGS += --without-pam
 endif
 
 define Package/netatalk/install
