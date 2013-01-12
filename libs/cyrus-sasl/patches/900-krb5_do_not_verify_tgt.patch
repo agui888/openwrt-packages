@@ -1,6 +1,6 @@
 --- a/saslauthd/auth_krb5.c	2012-07-11 00:16:09.968102908 +0200
 +++ b/saslauthd/auth_krb5.c	2012-07-11 00:22:56.996962718 +0200
-@@ -418,11 +418,13 @@
+@@ -434,11 +434,13 @@
  	return strdup("NO saslauthd internal error");
      }
      

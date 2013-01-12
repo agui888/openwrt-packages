@@ -1,22 +1,13 @@
 --- a/lib/Makefile.am
 +++ b/lib/Makefile.am
 @@ -44,6 +44,7 @@
- sasl_version = 2:23:0
+ sasl_version = 2:25:0
  
  INCLUDES=-I$(top_srcdir)/include -I$(top_srcdir)/plugins -I$(top_builddir)/include -I$(top_srcdir)/sasldb
 +SASL_STATIC_SRC = $(patsubst %.o, %.c, $(SASL_STATIC_OBJS))
  
  EXTRA_DIST = windlopen.c staticopen.h NTMakefile
  EXTRA_LIBRARIES = libsasl2.a
-@@ -93,7 +94,7 @@ libsasl2.a: libsasl2.la $(SASL_STATIC_OB
- 	rm -f $@
- 	ln -s .libs/$@ $@
- 
--$(SASL_STATIC_OBJS): linksrcs
-+$(SASL_STATIC_SRC): linksrcs
- 
- linksrcs:
- 	-ln -s $(SASL_STATIC_SRCS) .
 --- a/lib/Makefile.in
 +++ b/lib/Makefile.in
 @@ -176,6 +176,7 @@ SASL_KRB_LIB = @SASL_KRB_LIB@

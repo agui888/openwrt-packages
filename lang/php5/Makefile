@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
-PKG_VERSION:=5.4.5
+PKG_VERSION:=5.4.10
 PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
-PKG_MD5SUM:=ffcc7f4dcf2b79d667fe0c110e6cb724
+PKG_MD5SUM:=
 
 PKG_FIXUP:=libtool no-autoreconf
 PKG_BUILD_PARALLEL:=1

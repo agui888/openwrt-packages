@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cyrus-sasl
-PKG_VERSION:=2.1.23
+PKG_VERSION:=2.1.25
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.andrew.cmu.edu/pub/cyrus-mail/
-PKG_MD5SUM:=2eb0e48106f0e9cd8001e654f267ecbc
+PKG_MD5SUM:=
 
 PKG_LICENSE:=BSD-4c BSD
 PKG_LICENSE_FILES:=COPYING cmulocal/COPYING saslauthd/COPYING
@@ -32,7 +32,7 @@ define Package/libsasl2
   CATEGORY:=Libraries
   TITLE:=A general purpose authentication library
   URL:=http://asg.web.cmu.edu/sasl/
-  DEPENDS:=+krb5-libs
+  DEPENDS:=+krb5-libs +libopenssl
 endef
 
 define Package/sasl2

@@ -1,6 +1,6 @@
 diff -rupN libcrypto++-5.6.0.orig/algebra.cpp libcrypto++-5.6.0/algebra.cpp
---- libcrypto++-5.6.0.orig/algebra.cpp	Sun Mar  1 20:44:04 2009
-+++ libcrypto++-5.6.0/algebra.cpp	Fri Oct 12 20:18:44 2012
+--- a/algebra.cpp	Sun Mar  1 20:44:04 2009
++++ b/algebra.cpp	Fri Oct 12 20:18:44 2012
 @@ -58,7 +58,7 @@ template <class T> const T& AbstractEucl
  	Element g[3]={b, a};
  	unsigned int i0=0, i1=1, i2=2;
@@ -11,8 +11,8 @@ diff -rupN libcrypto++-5.6.0.orig/algebra.cpp libcrypto++-5.6.0/algebra.cpp
  		g[i2] = Mod(g[i0], g[i1]);
  		unsigned int t = i0; i0 = i1; i1 = i2; i2 = t;
 diff -rupN libcrypto++-5.6.0.orig/eccrypto.cpp libcrypto++-5.6.0/eccrypto.cpp
---- libcrypto++-5.6.0.orig/eccrypto.cpp	Sun Mar 15 03:48:02 2009
-+++ libcrypto++-5.6.0/eccrypto.cpp	Fri Oct 12 20:17:08 2012
+--- a/eccrypto.cpp	Sun Mar 15 03:48:02 2009
++++ b/eccrypto.cpp	Fri Oct 12 20:17:08 2012
 @@ -435,7 +435,7 @@ template <class EC> void DL_GroupParamet
  	StringSource ssG(param.g, true, new HexDecoder);
  	Element G;
@@ -41,8 +41,8 @@ diff -rupN libcrypto++-5.6.0.orig/eccrypto.cpp libcrypto++-5.6.0/eccrypto.cpp
  
  template <class EC>
 diff -rupN libcrypto++-5.6.0.orig/eccrypto.h libcrypto++-5.6.0/eccrypto.h
---- libcrypto++-5.6.0.orig/eccrypto.h	Sun Mar  1 20:44:02 2009
-+++ libcrypto++-5.6.0/eccrypto.h	Fri Oct 12 20:17:30 2012
+--- a/eccrypto.h	Sun Mar  1 20:44:02 2009
++++ b/eccrypto.h	Fri Oct 12 20:17:30 2012
 @@ -43,7 +43,7 @@ public:
  	void Initialize(const EllipticCurve &ec, const Point &G, const Integer &n, const Integer &k = Integer::Zero())
  	{
@@ -77,9 +77,9 @@ diff -rupN libcrypto++-5.6.0.orig/eccrypto.h libcrypto++-5.6.0/eccrypto.h
  	// PKCS8PrivateKey
  	void BERDecodePrivateKey(BufferedTransformation &bt, bool parametersPresent, size_t size);
 diff -rupN libcrypto++-5.6.0.orig/panama.cpp libcrypto++-5.6.0/panama.cpp
---- libcrypto++-5.6.0.orig/panama.cpp	Sun Mar  1 20:44:00 2009
-+++ libcrypto++-5.6.0/panama.cpp	Fri Oct 12 20:19:27 2012
-@@ -420,7 +420,7 @@ void PanamaHash<B>::TruncatedFinal(byte 
+--- a/panama.cpp	Sun Mar  1 20:44:00 2009
++++ b/panama.cpp	Fri Oct 12 20:19:27 2012
+@@ -422,7 +420,7 @@ void PanamaHash<B>::TruncatedFinal(byte 
  {
  	this->ThrowIfInvalidTruncatedSize(size);
  
@@ -89,9 +89,9 @@ diff -rupN libcrypto++-5.6.0.orig/panama.cpp libcrypto++-5.6.0/panama.cpp
  	HashEndianCorrectedBlock(this->m_data);
  
 diff -rupN libcrypto++-5.6.0.orig/secblock.h libcrypto++-5.6.0/secblock.h
---- libcrypto++-5.6.0.orig/secblock.h	Sun Mar 15 03:48:02 2009
-+++ libcrypto++-5.6.0/secblock.h	Fri Oct 12 20:13:31 2012
-@@ -94,7 +94,7 @@ public:
+--- a/secblock.h	Sun Mar 15 03:48:02 2009
++++ b/secblock.h	Fri Oct 12 20:13:31 2012
+@@ -88,7 +88,7 @@ public:
  
  	pointer allocate(size_type n, const void * = NULL)
  	{
