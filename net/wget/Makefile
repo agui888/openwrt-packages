@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wget
-PKG_VERSION:=1.14
+PKG_VERSION:=1.9
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/$(PKG_NAME)
-PKG_MD5SUM:=316f6f59292c9098ad81fd54f658c579
+PKG_MD5SUM:=
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -26,7 +26,7 @@ define Package/wget/Default
   SUBMENU:=File Transfer
   TITLE:=Non-interactive network downloader
   URL:=http://www.gnu.org/software/wget/index.html
-  DEPENDS:= +librt +libpcre
+  DEPENDS:= +librt
 endef
 
 define Package/wget/Default/description
@@ -68,8 +68,7 @@ CONFIGURE_ARGS+= \
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS+= \
-		--with-ssl=openssl \
-		--with-libssl-prefix="$(STAGING_DIR)/usr"
+		--with-ssl="$(STAGING_DIR)/usr"
 endif
 
 ifeq ($(BUILD_VARIANT),nossl)

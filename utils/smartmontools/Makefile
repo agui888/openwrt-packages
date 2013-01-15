@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/uclibc++.mk
 
 PKG_NAME:=smartmontools
-PKG_VERSION:=5.42
+PKG_VERSION:=6.0
 PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -50,6 +50,11 @@ define Package/smartd/description
   ATA and SCSI disks. It is derived from smartsuite.
 endef
 
+define Package/smartmonmulti
+  $(call Package/smartmontools/Default)
+  TITLE+= Multicall (Daemon + Tool)
+endef
+
 # uses GNU configure
 
 define Build/Configure
@@ -79,9 +84,21 @@ define Package/smartd/install
 	$(INSTALL_BIN) ./files/smartd.init $(1)/etc/init.d/smartd
 endef
 
+define Package/smartmonmulti/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/smartmontools $(1)/usr/sbin/
+	ln -sf smartmontools $(1)/usr/sbin/smartctl
+	ln -sf smartmontools $(1)/usr/sbin/smartd
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DATA) ./files/smartd.conf $(1)/etc/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/smartd.init $(1)/etc/init.d/smartd
+endef
+
 define Package/smartd/conffiles
 /etc/smartd.conf
 endef
 
 $(eval $(call BuildPackage,smartmontools))
 $(eval $(call BuildPackage,smartd))
+$(eval $(call BuildPackage,smartmonmulti))
