@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://mirrors.m0k.org/transmission/files
-PKG_MD5SUM:=
+PKG_MD5SUM:=bbe6fb5c9e8a0f8d970defb1d80a28df
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
