@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2012 OpenWrt.org
+# Copyright (C) 2009-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=netatalk
 PKG_VERSION:=2.2.1
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/netatalk
@@ -41,7 +41,7 @@ define Package/netatalk/conffiles
 /etc/netatalk/afpd.conf
 endef
 
-TARGET_CFLAGS += $(LIBRPC_INCLUDE) -std=gnu99 -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
+TARGET_CFLAGS += -std=gnu99
 TARGET_LDFLAGS += $(LIBRPC)
 
 CONFIGURE_ARGS += \
@@ -60,7 +60,7 @@ CONFIGURE_ARGS += \
 	--with-uams-path="/usr/lib/uams" \
 	--disable-admin-group \
 	--disable-srvloc \
-	--without-shadow \
+	$(if $(CONFIG_SHADOW_PASSWORDS),--with-shadow,--without-shadow) \
 	--without-ldap
 
 ifdef CONFIG_PACKAGE_avahi-daemon
