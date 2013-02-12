@@ -167,7 +167,7 @@
 +{
 +	int ret;
 +	off_t new_offset, round_offset;
-+	struct stat buf;
++	struct stat64 buf;
 +	ssize_t rret;
 +
 +	// flush the buffer data
@@ -184,7 +184,7 @@
 +			break;
 +
 +		case SEEK_END:
-+			if((ret=fstat(daioData->fd, &buf))<0)
++			if((ret=fstat64(daioData->fd, &buf))<0)
 +				return -1;
 +			new_offset = buf.st_size+offset;
 +			break;
@@ -377,7 +377,7 @@
 +	daio_t *daio;
 +	unsigned int to_read, to_write, chunk_size = VSFTP_DATA_BUFSIZE;
 +	struct vsf_transfer_ret ret_struct = { 0, 0 };
-+	struct stat buf;
++	struct stat64 buf;
 +	int oflag, ret;
 +	
 +	oflag = fcntl(file_fd, F_GETFL) & ~O_ACCMODE;
@@ -390,7 +390,7 @@
 +		goto err_deinit;
 +	}
 +
-+	if (fstat(file_fd, &buf) < 0) {
++	if (fstat64(file_fd, &buf) < 0) {
 +		syslog(LOG_ERR, "fstat  failed with %d", errno);
 +		ret_struct.retval = -2;
 +		goto err_deinit;
