@@ -65,7 +65,7 @@ endef
 define Package/libminiupnpc/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) \
-		$(PKG_INSTALL_DIR)/usr/lib/libminiupnpc.so.* \
+		$(PKG_INSTALL_DIR)/usr/lib/libminiupnpc.so* \
 		$(1)/usr/lib/
 endef
 

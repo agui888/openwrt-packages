@@ -128,6 +128,7 @@ FFMPEG_MINI_DEMUXERS := \
 	mov \
 	mp3 \
 	mpegts \
+	mpegps \
 	mpegvideo \
 	rtsp \
 
@@ -330,7 +331,7 @@ ifeq ($(BUILD_VARIANT),mini)
 	)
 
   FFMPEG_CONFIGURE+= \
-	--disable-ffmpeg \
+	--enable-ffmpeg \
 	--disable-ffplay \
 	--disable-ffprobe \
 	--disable-ffserver \
