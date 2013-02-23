@@ -14,7 +14,7 @@
      /* promote_db */                        NULL,
 --- a/src/plugins/kdb/ldap/libkdb_ldap/kdb_ldap.h	2012-07-17 00:35:11.546115558 +0200
 +++ b/src/plugins/kdb/ldap/libkdb_ldap/kdb_ldap.h	2012-07-18 21:44:18.371065900 +0200
-@@ -306,6 +306,20 @@
+@@ -298,6 +298,20 @@
                                      const krb5_db_entry *server,
                                      krb5_const_principal proxy);
  
@@ -55,7 +55,7 @@
  krb5_error_code
  krb5_ldap_get_db_opt(char *input, char **opt, char **val)
  {
-@@ -595,3 +599,170 @@
+@@ -563,3 +567,170 @@
  
      return code;
  }

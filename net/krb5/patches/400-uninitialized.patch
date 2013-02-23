@@ -1,6 +1,6 @@
 --- a/src/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c	2012-07-11 20:05:00.225834136 +0200
 +++ b/src/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c	2012-07-11 20:05:39.134538384 +0200
-@@ -1349,8 +1349,8 @@
+@@ -1359,8 +1359,8 @@
          goto cleanup;
  
      for (i=0; bvalues[i] != NULL; ++i) {
@@ -13,7 +13,7 @@
          if (bvalues[i]->bv_len == 0)
 --- a/src/kdc/do_as_req.c	2012-07-11 20:10:21.531380063 +0200
 +++ b/src/kdc/do_as_req.c	2012-07-11 20:08:17.670327693 +0200
-@@ -140,7 +140,7 @@
+@@ -133,7 +133,7 @@
      const char *emsg = 0;
      int did_log = 0;
      register int i;
@@ -21,10 +21,10 @@
 +    krb5_enctype useenctype = 0;
      loop_respond_fn oldrespond;
      void *oldarg;
- 
+     kdc_realm_t *kdc_active_realm = state->active_realm;
 --- a/src/slave/kprop.c	2012-07-11 20:11:26.897878314 +0200
 +++ b/src/slave/kprop.c	2012-07-11 20:12:42.204298183 +0200
-@@ -91,7 +91,7 @@
+@@ -92,7 +92,7 @@
      int     argc;
      char    **argv;
  {

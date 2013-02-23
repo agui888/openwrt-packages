@@ -1,14 +1,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=krb5
-PKG_VERSION_MAJOR=1.10
-PKG_VERSION_MINOR=.2
+PKG_VERSION_MAJOR=1.11
+PKG_VERSION_MINOR=
 PKG_VERSION:=$(PKG_VERSION_MAJOR)$(PKG_VERSION_MINOR)
 PKG_RELEASE:=2
 
 PKG_SOURCE:=krb5-$(PKG_VERSION)-signed.tar
 PKG_SOURCE_URL:=http://web.mit.edu/kerberos/dist/krb5/$(PKG_VERSION_MAJOR)/
-#PKG_MD5SUM:=74257d68373a8df8b9391fc093d594be
+PKG_MD5SUM:=1a13c53899806c4da99a798a04d25545
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=+libopenldap
@@ -33,7 +33,7 @@ define Package/krb5-libs
 	SECTION:=net
 	CATEGORY:=Network
 	TITLE:=Kerberos
-	DEPENDS:=+libncurses +libopenldap +libkeyutils
+	DEPENDS:=+libncurses +libopenldap +libkeyutils +libreadline
 	TITLE:=Kerberos 5 Shared Libraries
 	URL:=http://web.mit.edu/kerberos/
 	MAINTAINER:=W. Michael Petullo <mike@flyn.org>
@@ -57,7 +57,7 @@ define Package/krb5-client
 	TITLE:=Kerberos 5 Client
 endef
 
-define Package/krb5/decription
+define Package/krb5/description
 	Kerberos
 endef
 
@@ -82,10 +82,13 @@ CONFIGURE_VARS += \
 CONFIGURE_ARGS += \
 	--enable-thread-support \
 	--without-tcl \
+	--without-libedit \
+	--with-readline \
 	--with-ldap \
 	--with-size-optimizations \
 	--enable-dns-for-realm \
-	--with-system-verto=no
+	--with-system-verto=no \
+	--localstatedir=/etc
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
@@ -135,8 +138,8 @@ endef
 define Package/krb5-server/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/krb5kdc $(1)/etc/init.d/krb5kdc
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/sclient $(1)/usr/bin
+#	$(INSTALL_DIR) $(1)/usr/bin
+#	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/sclient $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kadmin.local $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kadmind $(1)/usr/sbin
