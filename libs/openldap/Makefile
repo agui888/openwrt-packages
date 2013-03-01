@@ -104,7 +104,7 @@ CONFIGURE_ARGS += \
 	--enable-null \
 	--disable-bdb \
 	--disable-hdb \
-	--disable-mdb \
+	--enable-mdb \
 	--disable-monitor \
 	--disable-relay \
 	--enable-overlays \

@@ -422,7 +422,7 @@ endef
 
 define Package/libffmpeg-full/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{avcodec,avdevice,avfilter,avformat,avutil,postproc,swscale}.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{avcodec,avdevice,avfilter,avformat,avutil,postproc,swscale,swresample}.so.* $(1)/usr/lib/
 endef
 
 Package/libffmpeg-mini/install = $(Package/libffmpeg-custom/install)

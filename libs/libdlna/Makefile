@@ -57,6 +57,10 @@ define Build/Configure
 	)
 endef
 
+define Build/Compile
+	$(call Build/Compile/Default, lib)
+endef
+
 # XXX: fix build on systems where install is not at its usual location
 # INSTALL defaults to /usr/bin/install
 MAKE_INSTALL_FLAGS += \

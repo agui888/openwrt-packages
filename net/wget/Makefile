@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wget
-PKG_VERSION:=1.9
+PKG_VERSION:=1.14
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -26,7 +26,7 @@ define Package/wget/Default
   SUBMENU:=File Transfer
   TITLE:=Non-interactive network downloader
   URL:=http://www.gnu.org/software/wget/index.html
-  DEPENDS:= +librt
+  DEPENDS:= +librt +libpcre
 endef
 
 define Package/wget/Default/description
@@ -68,7 +68,8 @@ CONFIGURE_ARGS+= \
 
 ifeq ($(BUILD_VARIANT),ssl)
 	CONFIGURE_ARGS+= \
-		--with-ssl="$(STAGING_DIR)/usr"
+		--with-libssl-prefix=$(STAGING_DIR)/usr \
+		--with-ssl=openssl
 endif
 
 ifeq ($(BUILD_VARIANT),nossl)
