@@ -50,6 +50,12 @@ start_server() {
 			sed -i -e "s/passwd:files$/passwd:files ldap/g" -e "s/group:files$/group:files ldap/g" $NSSWITCH
 		}
 	}
+
+	for file in /lib/upgrade/openldap/*; do [ -f $file ] && {
+		lua $file
+		rm $file
+	}
+	done
 }
 
 start() {
