@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_DISTNAME:=$(PKG_NAME)_git
-PKG_VERSION:=1.3.13b
+PKG_VERSION:=1.3.14b
 
 
 #
@@ -18,7 +18,7 @@ PKG_VERSION:=1.3.13b
 #
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
-FS_DEFAULT_HEAD:=8258e782d47f4b01c4684b68ecce417298fbbebe
+FS_DEFAULT_HEAD:=c35a41e4ca209f822d561f4601f1f387bfc9a82e
 FS_LATEST_HEAD:=$(shell git ls-remote $(PKG_SOURCE_URL) HEAD | cut -f1)
 PKG_SOURCE_VERSION:=$(if $(CONFIG_FS_SOFIA_WITH_PULL_CURRENT),$(FS_LATEST_HEAD),$(FS_DEFAULT_HEAD))
 PKG_SOURCE_VERSION_SHORT:=$(shell echo $(PKG_SOURCE_VERSION)|cut -b -7)
@@ -680,7 +680,7 @@ define Package/$(PKG_NAME)/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib$(PKG_NAME)* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/$(PKG_NAME).pc $(1)/usr/lib/pkgconfig/
-	$(if $(1)/usr/lib/lib$(PKG_NAME).la,$(SED) "s#-lcurl -lz\(.*\)/usr/lib/libexpat.la\(.*\)$(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)\(.*\)#-L/usr/lib -lcurl -lz /usr/lib/libexpat.la\2/usr\3#g" $(1)/usr/lib/lib$(PKG_NAME).la)
+	$(if $(1)/usr/lib/lib$(PKG_NAME).la,sed -i -e "s#-lcurl -lz\(.*\)/usr/lib/libexpat.la\(.*\)$(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)\(.*\)#-L/usr/lib -lcurl -lz /usr/lib/libexpat.la\2/usr\3#g" $(1)/usr/lib/lib$(PKG_NAME).la)
 endef
 
 
@@ -841,7 +841,7 @@ define BuildLib
 
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/$(patsubst lib%,%,$(3)).pc $$(1)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/$(1)* $$(1)/usr/lib/
-	$(if $$(1)/usr/lib/$(1).la,$(SED) "s#\(^.*\)=' \(.*\)-lm\(.*\)#\1=' -L/usr/lib -L/usr/lib/libiconv-full/lib -L/usr/lib/libintl-full/lib -lm\3#g" $$(1)/usr/lib/$(1).la)
+	$(if $$(1)/usr/lib/$(1).la,sed -i -e "s#\(^.*\)=' \(.*\)-lm\(.*\)#\1=' -L/usr/lib -L/usr/lib/libiconv-full/lib -L/usr/lib/libintl-full/lib -lm\3#g" $$(1)/usr/lib/$(1).la)
   endef
 
   $$(eval $$(call BuildPackage,$(PKG_NAME)-$(1)))
@@ -882,7 +882,7 @@ define BuildPlugin
 	#
 	for f in `ls $$(1)/usr/lib/$(PKG_NAME)/*.la`; \
 	do \
-		$(SED) "s#' \(.*\)/usr/lib/libexpat.la\(.*\)$(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)\(.*\)#' -L/usr/lib -L/usr/lib/libiconv-full/lib -L/usr/lib/libintl-full/lib /usr/lib/lib$(PKG_NAME).la /usr/lib/libexpat.la\2/usr\3#g;s#' \(.*\)/usr/lib/libintl-full/lib#' -L/usr/lib -L/usr/lib/libiconv-full/lib -L/usr/lib/libintl-full/lib#g;s#-L\.\.##g;s#$(PKG_BUILD_DIR)\(.*\)/usr/lib/libtiff.la\(.*\)#/usr/lib/libtiff.la\2#g" $$$$$$$${f}; \
+		sed -i -e "s#' \(.*\)/usr/lib/libexpat.la\(.*\)$(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)\(.*\)#' -L/usr/lib -L/usr/lib/libiconv-full/lib -L/usr/lib/libintl-full/lib /usr/lib/lib$(PKG_NAME).la /usr/lib/libexpat.la\2/usr\3#g;s#' \(.*\)/usr/lib/libintl-full/lib#' -L/usr/lib -L/usr/lib/libiconv-full/lib -L/usr/lib/libintl-full/lib#g;s#-L\.\.##g;s#$(PKG_BUILD_DIR)\(.*\)/usr/lib/libtiff.la\(.*\)#/usr/lib/libtiff.la\2#g" $$$$$$$${f}; \
 	done
 
 	#
@@ -918,12 +918,12 @@ define BuildPlugin
 
   define Package/$(PKG_NAME)-mod-$(1)/postinst
 #!/bin/sh
-$(SED) 's|^\([ \t]*\)<!-- *\(.*\)"mod_$(subst -,_,$(1))"\(.*\) *-->\(.*\)$$$$|\1\2"mod_$(subst -,_,$(1))"\3\4|' $$$$(IPKG_INSTROOT)/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
+sed -i -e 's|^\([ \t]*\)<!-- *\(.*\)"mod_$(subst -,_,$(1))"\(.*\) *-->\(.*\)$$$$|\1\2"mod_$(subst -,_,$(1))"\3\4|' $$$${IPKG_INSTROOT}/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
   endef
 
   define Package/$(PKG_NAME)-mod-$(1)/postrm
 #!/bin/sh
-$(SED) 's|^\([ \t]*\)\(.*\)"mod_$(subst -,_,$(1))"\(.*\)$$$$|\1<!-- \2"mod_$(subst -,_,$(1))"\3 -->|' $$$$(IPKG_INSTROOT)/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
+sed -i -e 's|^\([ \t]*\)\(.*\)"mod_$(subst -,_,$(1))"\(.*\)$$$$|\1<!-- \2"mod_$(subst -,_,$(1))"\3 -->|' $$$${IPKG_INSTROOT}/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
   endef
 
   $$(eval $$(call BuildPackage,$(PKG_NAME)-mod-$(1)))
