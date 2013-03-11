@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_DISTNAME:=$(PKG_NAME)_git
-PKG_VERSION:=1.3.14b
+PKG_VERSION:=1.3.17
 
 
 #
@@ -18,7 +18,7 @@ PKG_VERSION:=1.3.14b
 #
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
-FS_DEFAULT_HEAD:=c35a41e4ca209f822d561f4601f1f387bfc9a82e
+FS_DEFAULT_HEAD:=d9a4b8a9b0304ceb9267b9e7c8551066a1826b0b
 FS_LATEST_HEAD:=$(shell git ls-remote $(PKG_SOURCE_URL) HEAD | cut -f1)
 PKG_SOURCE_VERSION:=$(if $(CONFIG_FS_SOFIA_WITH_PULL_CURRENT),$(FS_LATEST_HEAD),$(FS_DEFAULT_HEAD))
 PKG_SOURCE_VERSION_SHORT:=$(shell echo $(PKG_SOURCE_VERSION)|cut -b -7)
@@ -154,6 +154,7 @@ FS_MOD_AVAILABLE:= \
 	vmd \
 	voicemail \
 	voicemail-ivr \
+	vp8 \
 	xml-cdr \
 	xml-curl \
 	xml-rpc \
@@ -921,7 +922,7 @@ define BuildPlugin
 sed -i -e 's|^\([ \t]*\)<!-- *\(.*\)"mod_$(subst -,_,$(1))"\(.*\) *-->\(.*\)$$$$|\1\2"mod_$(subst -,_,$(1))"\3\4|' $$$${IPKG_INSTROOT}/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
   endef
 
-  define Package/$(PKG_NAME)-mod-$(1)/postrm
+  define Package/$(PKG_NAME)-mod-$(1)/prerm
 #!/bin/sh
 sed -i -e 's|^\([ \t]*\)\(.*\)"mod_$(subst -,_,$(1))"\(.*\)$$$$|\1<!-- \2"mod_$(subst -,_,$(1))"\3 -->|' $$$${IPKG_INSTROOT}/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
   endef
@@ -1077,6 +1078,7 @@ $(eval $(call BuildPlugin,valet-parking,Valet Parking Application,vanilla,,,,))
 $(eval $(call BuildPlugin,vmd,VoiceMail Beep Detection,vanilla,,,,))
 $(eval $(call BuildPlugin,voicemail,VoiceMail,vanilla,,,,))
 $(eval $(call BuildPlugin,voicemail-ivr,VoiceMail IVR,vanilla,,,,))
+$(eval $(call BuildPlugin,vp8,VP8 Video Codec,vanilla,,,,))
 $(eval $(call BuildPlugin,xml-cdr,XML-CDR Handler,vanilla,,,,+libcurl))
 $(eval $(call BuildPlugin,xml-curl,XML-Curl Gateway,vanilla,,,,+libcurl))
 $(eval $(call BuildPlugin,xml-rpc,XML-RPC Interface,vanilla,,,,))
