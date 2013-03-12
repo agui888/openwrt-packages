@@ -152,6 +152,7 @@ SNMP_TRANSPORTS_EXCLUDED = TCP TCPIPv6 Unix
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
+	--enable-mini-agent \
 	--enable-mfd-rewrites \
 	--enable-shared \
 	--enable-static \
@@ -162,9 +163,7 @@ CONFIGURE_ARGS += \
 	--with-sys-contact=root@localhost \
 	--with-sys-location=Unknown \
 	--enable-applications \
-	--disable-debugging \
 	--disable-manuals \
-	--disable-mibs \
 	--disable-scripts \
 	--with-out-mib-modules="$(SNMP_MIB_MODULES_EXCLUDED)" \
 	--with-mib-modules="$(SNMP_MIB_MODULES_INCLUDED)" \
@@ -213,6 +212,8 @@ endef
 define Package/libnetsnmp/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnetsnmp{,agent,helpers,mibs}.so.* $(1)/usr/lib/
+	mkdir -p $(1)/usr/share/snmp/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/snmp/mibs/ $(1)/usr/share/snmp/
 endef
 
 define Package/snmpd/conffiles
