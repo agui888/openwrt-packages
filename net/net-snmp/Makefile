@@ -163,6 +163,7 @@ CONFIGURE_ARGS += \
 	--with-sys-contact=root@localhost \
 	--with-sys-location=Unknown \
 	--enable-applications \
+	--disable-debugging \
 	--disable-manuals \
 	--disable-scripts \
 	--with-out-mib-modules="$(SNMP_MIB_MODULES_EXCLUDED)" \
